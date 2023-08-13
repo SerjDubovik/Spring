@@ -1,2 +1,2 @@
 # Spring
-Примеры проектов 
+Примеры проектов Spring framework
