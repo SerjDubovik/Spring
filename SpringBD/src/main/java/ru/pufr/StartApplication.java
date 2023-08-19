@@ -2,22 +2,20 @@ package ru.pufr;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
+@EnableScheduling
 @SpringBootApplication
-@Controller
-public class StartApplication {
-
-    @GetMapping("/")
-    public String index(final Model model) {
-        model.addAttribute("title", "Docker + Spring Boot");
-        model.addAttribute("msg", "Welcome to the docker container!");
-        return "index";
-    }
+public class StartApplication  extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         SpringApplication.run(StartApplication.class, args);
+    }
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        return builder.sources(StartApplication.class);
     }
 }
