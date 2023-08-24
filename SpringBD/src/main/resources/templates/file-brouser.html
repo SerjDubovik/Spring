@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
+
+    <style>
+        .form-test {
+            font: 16px Arial;
+        }
+        .form-test input {
+            font: 16px Arial;
+            border: none;
+            padding: 0;
+            background: #ffffff;
+            color: #000000;
+        }
+    </style>
+
+</head>
+
+<body>
+
+
+<header th:insert = "blocks/header :: header"></header>
+
+
+<div class="container">
+    <div class="row">
+
+<!--
+        <div class="container" th:each="mapItem : ${pathLine}">
+
+            <div class="col-md-2">
+                <p th:text="${mapItem.key}"></p>
+            </div>
+
+            <div class="col-md-2">
+                <p th:text="${mapItem.value.nameFolder}"></p>
+            </div>
+
+            <div class="col-md-8">
+                <p th:text="${mapItem.value.path}"></p>
+            </div>
+
+        </div>
+-->
+        <div class="container">
+            <form style="display:inline; float:left; margin:5pt;" class="btn btn-default" method="POST" action="/addFile" enctype="multipart/form-data">
+                <input class="btn btn-default" type="hidden" name="direction" th:value="${direction}">
+                <input class="btn btn-default" type="file" name="file" />
+                <input class="btn btn-default" type="submit" value="Загрузить файл" />
+            </form>
+        </div>
+
+        <br>
+
+        <div class="container">
+            <div style="display:inline; float:left; margin:5pt;" th:each="mapItem : ${pathLine}">
+                <div>
+                    <form class="form-test" th:action="@{/fileBrouser}" method="post">
+                        <input type="hidden" name="direction" th:value="${mapItem.value.path}">
+                        <input type="submit" th:value="${'/ ' + mapItem.value.nameFolder}">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+
+        <div class="container" th:each="mapItem : ${brouser}">
+
+            <div class="col-md-2">
+                <p th:text="${mapItem.key}"></p>
+            </div>
+
+            <div class="col-md-2">
+                <form class="form-test" th:action="@{/fileBrouser}" method="post">
+                    <input type="hidden" name="direction" th:value="${mapItem.value.path + mapItem.value.name}">
+                    <input type="submit" th:value="${mapItem.value.name}">
+                </form>
+            </div>
+
+            <div class="col-md-2">
+                <p th:text="${mapItem.value.type}"></p>
+            </div>
+
+            <div class="col-md-2">
+                <p th:text="${mapItem.value.size}"></p>
+            </div>
+
+            <div class="col-md-4">
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Действие<span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <form class="form-test" th:action="@{/fileBrouser_delete}" method="post">
+                                <input type="hidden" name="direction" th:value="${mapItem.value.path + mapItem.value.name}">
+                                <input type="submit" value="Удалить">
+                            </form>
+                        </li>
+                        <li><a href="#">Скачать</a></li>
+                        <li><a href="#">Свойства</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<div th:insert = "blocks/footer :: footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+</body>
+</html>
