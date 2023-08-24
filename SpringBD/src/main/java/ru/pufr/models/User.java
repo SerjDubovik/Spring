@@ -1,13 +1,9 @@
 package ru.pufr.models;
 
 
-//import jakarta.persistence.*;
 import lombok.Data;
 
 import javax.persistence.*;
-
-
-
 
 @Data
 @Entity
@@ -59,15 +55,4 @@ public class User {
     public void setRole(String status) {
         this.status = Status.valueOf(status);
     }
-
-    /*
-    public User(String email, String password, String firstName, String lastName) {
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.role = Role.USER;
-        this.status = Status.ACTIVE;
-    }
-    */
 }

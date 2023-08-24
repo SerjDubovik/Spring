@@ -13,10 +13,4 @@ public class MyErrorController implements ErrorController {
         return "error-page";
     }
 
-    /*
-    //@Override
-    public String getErrorPath() {
-        return null;
-    }
-    */
 }
