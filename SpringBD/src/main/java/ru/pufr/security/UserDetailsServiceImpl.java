@@ -1,5 +1,6 @@
 package ru.pufr.security;
 
+
 import ru.pufr.models.User;
 import ru.pufr.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
