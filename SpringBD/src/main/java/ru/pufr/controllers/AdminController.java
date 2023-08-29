@@ -23,6 +23,7 @@ public class AdminController {
         return "adminkaAdmin";
     }
 
+    @PreAuthorize("hasAuthority('developers:write')")
     @GetMapping("/users")
     public String usersList (Model model){
         Iterable<User> users = userRepository.findAll();
@@ -30,6 +31,7 @@ public class AdminController {
         return "users-list";
     }
 
+    @PreAuthorize("hasAuthority('developers:write')")
     @PostMapping("/users/add")
     public String userListAdd(@RequestParam String email,
                               @RequestParam String password,
