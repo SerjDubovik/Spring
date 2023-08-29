@@ -47,10 +47,10 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.testCell = testCell;
-        //this.role = Role.valueOf(role);
-        //this.status = Status.valueOf(status);
-        this.role = Role.USER;
-        this.status = Status.ACTIVE;
+        this.role = Role.valueOf(role);
+        this.status = Status.valueOf(status);
+        //this.role = Role.USER;
+        //this.status = Status.ACTIVE;
     }
 
     public void setRole(String status) {

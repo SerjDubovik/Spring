@@ -1,12 +1,13 @@
 package ru.pufr.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ru.pufr.models.User;
 import ru.pufr.repo.UserRepository;
 
@@ -16,6 +17,7 @@ public class AdminController {
     @Autowired
     private UserRepository userRepository;
 
+    @PreAuthorize("hasAuthority('developers:write')")
     @GetMapping("/enter")
     public String adminHome(Model model) {
         return "adminkaAdmin";
@@ -39,8 +41,8 @@ public class AdminController {
 
 
 
-        //BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);  // для хранения в базе, пароль должен быть закодирован
-        //String hashedPassword = passwordEncoder.encode(password);
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);  // для хранения в базе, пароль должен быть закодирован
+        String hashedPassword = passwordEncoder.encode(password);
 
         String str = new String();          // !!!!!! тестовый код !!!! проверка добавления новой колонки в базу
 
