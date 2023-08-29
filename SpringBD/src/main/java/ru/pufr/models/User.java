@@ -2,8 +2,8 @@ package ru.pufr.models;
 
 import lombok.Data;
 
-import jakarta.persistence.*;
-
+//import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Data
 @Entity
