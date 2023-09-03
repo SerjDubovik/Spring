@@ -19,17 +19,21 @@
 <div class="container">
     <div class="row">
 
-        <div class="container mt-5 mb-5">
-            <h2>Добавить нового пользователя</h2>
-            <form action="/registration" method="post">
-                <input type="text" name="email"     placeholder="e-mail"   class="form-control"><br>
-                <input type="text" name="password"  placeholder="Пароль"                class="form-control"><br>
-                <input type="text" name="firstName" placeholder="Имя"                   class="form-control"><br>
-                <input type="text" name="lastName"  placeholder="Фамилия"               class="form-control"><br>
+            <div th:each="el : ${user}" class="alert alert-info mt-2">
+                <form method="post">
+                    <input type="text" th:value="${el.email}" name="email" placeholder="Введите email" class="form-control"><br>
+                    <input type="text" th:value="${el.password}" name="password" placeholder="Введите пароль" class="form-control"><br>
+                    <input type="text" th:value="${el.firstName}" name="firstName" placeholder="Введите имя" class="form-control"><br>
+                    <input type="text" th:value="${el.lastName}" name="lastName" placeholder="Введите фамилию" class="form-control"><br>
+                    <input type="text" th:value="${el.role}" name="role" placeholder="Введите роль" class="form-control"><br>
+                    <input type="text" th:value="${el.status}" name="status" placeholder="Введите статус" class="form-control"><br>
 
-                <button type="submit" class="btn btn-success">Добавить</button><br>
-            </form>
+
+                    <button type="submit" class="btn btn-success">Обновить</button><br>
+                </form>
+            </div>
         </div>
+
         <br>
 
         <p th:text="${message}"></p>

@@ -19,7 +19,26 @@
 <div class="container">
     <div class="row">
 
-        <div th:utext="${test}"></div>
+        <br>
+
+        <div class="container mt-5 mb-5">
+            <h2>Добавить нового пользователя</h2>
+            <form action="/users/add" method="post">
+                <input type="text" name="email"     placeholder="e-mail пользователя"   class="form-control"><br>
+                <input type="text" name="password"  placeholder="Пароль"                class="form-control"><br>
+                <input type="text" name="firstName" placeholder="Имя"                   class="form-control"><br>
+                <input type="text" name="lastName"  placeholder="Фамилия"               class="form-control"><br>
+                <input type="text" name="role"      placeholder="Роль пользователя"     class="form-control"><br>
+                <input type="text" name="status"    placeholder="Статус пользователя"   class="form-control"><br>
+
+                <button type="submit" class="btn btn-success">Добавить</button><br>
+            </form>
+        </div>
+
+        <br>
+
+        <p th:text="${message}"></p>
+
 
     </div>
 </div>

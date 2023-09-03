@@ -19,38 +19,29 @@
 
 <header th:insert = "blocks\header :: header"></header>
 
+<div class="container">
+    <div class="row">
 
-<div class="container mt-5 mb-5">
-    <h2>Добавить нового пользователя</h2>
-    <form action="/users/add" method="post">
-        <input type="text" name="email"     placeholder="e-mail пользователя"   class="form-control"><br>
-        <input type="text" name="password"  placeholder="Пароль"                class="form-control"><br>
-        <input type="text" name="firstName" placeholder="Имя"                   class="form-control"><br>
-        <input type="text" name="lastName"  placeholder="Фамилия"               class="form-control"><br>
-        <input type="text" name="role"      placeholder="Роль пользователя"     class="form-control"><br>
-        <input type="text" name="status"    placeholder="Статус пользователя"   class="form-control"><br>
+        <div class="col-md-8">
+                <h2>Список пользователей</h2>
 
-        <button type="submit" class="btn btn-success">Добавить</button><br>
-    </form>
-</div>
 
-<br>
-<br>
+                <div th:each="el : ${users}" class="alert alert-info mt-2">
+                    <p th:text="${el.email}"></p>
+                    <p th:text="${el.password}"></p>
+                    <p th:text="${el.firstName}"></p>
+                    <p th:text="${el.lastName}"></p>
+                    <p th:text="${el.role}"></p>
+                    <p th:text="${el.status}"></p>
 
-<div class="container mt-5">
-    <h2>Список пользователей</h2>
-</div>
+                    <a th:href="'/users/' + ${el.id}" class="btn btn-warning">Детальнее</a>
+                </div>
+        </div>
 
-<div  class="container mt-5">
-    <div th:each="el : ${users}" class="alert alert-info mt-2">
-        <p th:text="${el.email}"></p>
-        <p th:text="${el.password}"></p>
-        <p th:text="${el.firstName}"></p>
-        <p th:text="${el.lastName}"></p>
-        <p th:text="${el.role}"></p>
-        <p th:text="${el.status}"></p>
-
-        <a th:href="'/users/' + ${el.id}" class="btn btn-warning">Детальнее</a>
+        <div class="col-md-4">
+            <a th:href="'/users'" class="btn btn-warning">Обновить список</a>
+            <a th:href="'/userAdd'" class="btn btn-warning">Создать пользователя</a>
+        </div>
     </div>
 </div>
 
