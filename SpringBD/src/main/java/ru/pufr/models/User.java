@@ -41,7 +41,7 @@ public class User {
     public User() {
     }
 
-    public User(String email, String password, String firstName, String lastName, String testCell,String role, String status) {
+    public User(String email, String password, String firstName, String lastName, String testCell, String role, String status) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -53,7 +53,4 @@ public class User {
         //this.status = Status.ACTIVE;
     }
 
-    public void setRole(String status) {
-        this.status = Status.valueOf(status);
-    }
 }

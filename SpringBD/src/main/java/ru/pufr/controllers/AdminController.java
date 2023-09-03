@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import ru.pufr.models.Role;
 import ru.pufr.models.Status;
 import ru.pufr.models.User;
 import ru.pufr.repo.UserRepository;
@@ -123,7 +124,7 @@ public class AdminController {
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setTestCell(uuid);
-        user.setRole(role);
+        user.setRole(Role.valueOf(role));
         user.setStatus(Status.valueOf(status));
 
         userRepository.save(user);
