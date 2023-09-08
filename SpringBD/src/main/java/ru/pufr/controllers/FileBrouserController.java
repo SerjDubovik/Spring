@@ -27,9 +27,10 @@ public class FileBrouserController {
     @GetMapping("/fileBrouser")
     public String fileBrouser(Model model) {            // @RequestParam String direction,
 
-        String path = "/opt/test/";
+        //String path = "/opt/test/";
+        String path = "/";
 
-        Map<Integer, FileView> brouser = new HashMap<Integer, FileView>();
+        Map<Integer, FileView> brouser = new HashMap<>();
 
         File dir = new File(path);                  // определяем объект для каталога
 
@@ -55,7 +56,7 @@ public class FileBrouserController {
             }
         }
 
-        Map<Integer, FileViewAddressPath> pathLine = new HashMap<Integer, FileViewAddressPath>();
+        Map<Integer, FileViewAddressPath> pathLine = new HashMap<>();
 
 
         String subВirection = path.substring(1);               // обрежем первый слеш в строке, мешает для следующего разбития строки на слова по слеши
@@ -80,75 +81,13 @@ public class FileBrouserController {
 
 
     @PreAuthorize("hasAuthority('developers:write')")
-    @PostMapping("/fileBrouser_delete")
-    public String fileBrouser_delete(@RequestParam String direction, Model model) {
-
-        Map<Integer, FileView> brouser = new HashMap<Integer, FileView>();
-
-
-        File deleteDir = new File(direction);
-        deleteDir.delete();
-
-
-        int index = direction.lastIndexOf('/');
-        String directionSub = direction.substring(0,index);
-
-        File dir = new File(directionSub);                  // определяем объект для каталога
-
-        directionSub = directionSub + "/";
-
-        if(dir.isDirectory())
-        {
-
-            int i = 0;
-
-            for(File item : dir.listFiles())       // получаем все вложенные объекты в каталоге
-            {
-                if(item.isDirectory())
-                {
-                    brouser.put(i, new FileView("logo",item.getName(),"folder", "", directionSub));
-
-                    i++;
-                }
-                else{
-
-                    brouser.put(i, new FileView("logo",item.getName(),"file", Long.toString(item.length()) + " Б", directionSub));
-
-                    i++;
-                }
-            }
-        }
-
-        Map<Integer, FileViewAddressPath> pathLine = new HashMap<Integer, FileViewAddressPath>();
-
-
-        String subВirection = directionSub.substring(1);            // обрежем первый слеш в строке, мешает для следующего разбития строки на слова по слеши
-        String[] words = subВirection.split("/");       // ну и тут строку на слова по слеши
-
-        String str = new String();
-
-        int i = 0;
-
-        for(String word : words){
-            str = str + "/" + word;
-            pathLine.put(i, new FileViewAddressPath(word, str));
-            i++;
-        }
-
-        model.addAttribute("direction", subВirection);
-        model.addAttribute("pathLine", pathLine);
-        model.addAttribute("brouser", brouser);
-        return "file-brouser";
-    }
-
-
-
-
-    @PreAuthorize("hasAuthority('developers:write')")
     @PostMapping("/fileBrouser")
     public String fileBrouser_edit(@RequestParam String direction, Model model) {
 
-        Map<Integer, FileView> brouser = new HashMap<Integer, FileView>();
+        Map<Integer, FileView> brouser = new HashMap<>();
+
+        System.out.println("Вернулась строка: " + direction);
+        // вот тут должна быть проверка валидности строки файлового браузера от не санкционированного перехода !!!
 
         File dir = new File(direction);                  // определяем объект для каталога
 
@@ -199,6 +138,68 @@ public class FileBrouserController {
     }
 
 
+
+    @PreAuthorize("hasAuthority('developers:write')")
+    @PostMapping("/fileBrouser_delete")
+    public String fileBrouser_delete(@RequestParam String direction, Model model) {
+
+        Map<Integer, FileView> brouser = new HashMap<>();
+
+
+        File deleteDir = new File(direction);
+        deleteDir.delete();
+
+
+        int index = direction.lastIndexOf('/');
+        String directionSub = direction.substring(0,index);
+
+        File dir = new File(directionSub);                  // определяем объект для каталога
+
+        directionSub = directionSub + "/";
+
+        if(dir.isDirectory())
+        {
+
+            int i = 0;
+
+            for(File item : dir.listFiles())       // получаем все вложенные объекты в каталоге
+            {
+                if(item.isDirectory())
+                {
+                    brouser.put(i, new FileView("logo",item.getName(),"folder", "", directionSub));
+
+                    i++;
+                }
+                else{
+
+                    brouser.put(i, new FileView("logo",item.getName(),"file", Long.toString(item.length()) + " Б", directionSub));
+
+                    i++;
+                }
+            }
+        }
+
+        Map<Integer, FileViewAddressPath> pathLine = new HashMap<>();
+
+
+        String subВirection = directionSub.substring(1);            // обрежем первый слеш в строке, мешает для следующего разбития строки на слова по слеши
+        String[] words = subВirection.split("/");       // ну и тут строку на слова по слеши
+
+        String str = new String();
+
+        int i = 0;
+
+        for(String word : words){
+            str = str + "/" + word;
+            pathLine.put(i, new FileViewAddressPath(word, str));
+            i++;
+        }
+
+        model.addAttribute("direction", subВirection);
+        model.addAttribute("pathLine", pathLine);
+        model.addAttribute("brouser", brouser);
+        return "file-brouser";
+    }
 
 
     @PreAuthorize("hasAuthority('developers:write')")
