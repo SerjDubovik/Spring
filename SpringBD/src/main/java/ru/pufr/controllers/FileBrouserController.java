@@ -15,8 +15,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 @Controller
 public class FileBrouserController {
@@ -30,33 +32,25 @@ public class FileBrouserController {
         //String path = "/opt/test/";
         String path = "/";
 
-        Map<Integer, FileView> brouser = new HashMap<>();
+        Map<String, FileView> brouser = new TreeMap<>();
 
         File dir = new File(path);                  // определяем объект для каталога
 
         if(dir.isDirectory())
         {
 
-            int i = 0;
-
             for(File item : dir.listFiles())       // получаем все вложенные объекты в каталоге
             {
                 if(item.isDirectory())
                 {
-                    brouser.put(i, new FileView("logo",item.getName(),"folder", "", path));
-
-                    i++;
-                }
-                else{
-
-                    brouser.put(i, new FileView("logo",item.getName(),"file", Long.toString(item.length()) + " Б", ""));
-
-                    i++;
+                    brouser.put(item.getName(), new FileView("logo",item.getName(),"folder", "", path));
+                }else{
+                    brouser.put(item.getName(), new FileView("logo",item.getName(),"file", Long.toString(item.length()) + " Б", ""));
                 }
             }
         }
 
-        Map<Integer, FileViewAddressPath> pathLine = new HashMap<>();
+        Map<Integer, FileViewAddressPath> pathLine = new LinkedHashMap<>();
 
 
         String subВirection = path.substring(1);               // обрежем первый слеш в строке, мешает для следующего разбития строки на слова по слеши
@@ -84,7 +78,7 @@ public class FileBrouserController {
     @PostMapping("/fileBrouser")
     public String fileBrouser_edit(@RequestParam String direction, Model model) {
 
-        Map<Integer, FileView> brouser = new HashMap<>();
+        Map<Integer, FileView> brouser = new TreeMap<>();
 
         System.out.println("Вернулась строка: " + direction);
         // вот тут должна быть проверка валидности строки файлового браузера от не санкционированного перехода !!!
@@ -95,7 +89,6 @@ public class FileBrouserController {
 
         if(dir.isDirectory())
         {
-
             int i = 0;
 
             for(File item : dir.listFiles())       // получаем все вложенные объекты в каталоге
@@ -115,7 +108,7 @@ public class FileBrouserController {
             }
         }
 
-        Map<Integer, FileViewAddressPath> pathLine = new HashMap<Integer, FileViewAddressPath>();
+        Map<Integer, FileViewAddressPath> pathLine = new LinkedHashMap<>();
 
 
         String subВirection = direction.substring(1);            // обрежем первый слеш в строке, мешает для следующего разбития строки на слова по слеши
@@ -143,7 +136,7 @@ public class FileBrouserController {
     @PostMapping("/fileBrouser_delete")
     public String fileBrouser_delete(@RequestParam String direction, Model model) {
 
-        Map<Integer, FileView> brouser = new HashMap<>();
+        Map<Integer, FileView> brouser = new TreeMap<>();
 
 
         File deleteDir = new File(direction);
@@ -179,7 +172,7 @@ public class FileBrouserController {
             }
         }
 
-        Map<Integer, FileViewAddressPath> pathLine = new HashMap<>();
+        Map<Integer, FileViewAddressPath> pathLine = new LinkedHashMap<>();
 
 
         String subВirection = directionSub.substring(1);            // обрежем первый слеш в строке, мешает для следующего разбития строки на слова по слеши
