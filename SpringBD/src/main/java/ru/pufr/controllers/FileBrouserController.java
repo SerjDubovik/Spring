@@ -78,7 +78,7 @@ public class FileBrouserController {
     @PostMapping("/fileBrouser")
     public String fileBrouser_edit(@RequestParam String direction, Model model) {
 
-        Map<Integer, FileView> brouser = new TreeMap<>();
+        Map<String, FileView> brouser = new TreeMap<>();
 
         System.out.println("Вернулась строка: " + direction);
         // вот тут должна быть проверка валидности строки файлового браузера от не санкционированного перехода !!!
@@ -95,15 +95,9 @@ public class FileBrouserController {
             {
                 if(item.isDirectory())
                 {
-                    brouser.put(i, new FileView("logo",item.getName(),"folder", "", direction));
-
-                    i++;
-                }
-                else{
-
-                    brouser.put(i, new FileView("logo",item.getName(),"file", Long.toString(item.length()) + " Б", direction));
-
-                    i++;
+                    brouser.put(item.getName(), new FileView("logo",item.getName(),"folder", "", direction));
+                }else{
+                    brouser.put(item.getName(), new FileView("logo",item.getName(),"file", Long.toString(item.length()) + " Б", direction));
                 }
             }
         }
@@ -136,7 +130,7 @@ public class FileBrouserController {
     @PostMapping("/fileBrouser_delete")
     public String fileBrouser_delete(@RequestParam String direction, Model model) {
 
-        Map<Integer, FileView> brouser = new TreeMap<>();
+        Map<String, FileView> brouser = new TreeMap<>();
 
 
         File deleteDir = new File(direction);
@@ -159,15 +153,9 @@ public class FileBrouserController {
             {
                 if(item.isDirectory())
                 {
-                    brouser.put(i, new FileView("logo",item.getName(),"folder", "", directionSub));
-
-                    i++;
-                }
-                else{
-
-                    brouser.put(i, new FileView("logo",item.getName(),"file", Long.toString(item.length()) + " Б", directionSub));
-
-                    i++;
+                    brouser.put(item.getName(), new FileView("logo",item.getName(),"folder", "", directionSub));
+                }else{
+                    brouser.put(item.getName(), new FileView("logo",item.getName(),"file", Long.toString(item.length()) + " Б", directionSub));
                 }
             }
         }

@@ -22,7 +22,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)                      // для того чтобы достум рахдавать прям в контроллерах GetMapping, PostMapping и т.д.
+@EnableGlobalMethodSecurity(prePostEnabled = true)                      // для того чтобы доступ раздавать прям в контроллерах GetMapping, PostMapping и т.д.
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
@@ -32,13 +32,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.userDetailsService = userDetailsService;
     }
 
-    /*
-    // авторизация по пользователям
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        super.configure(http);
-    }
-    */
+
+    
 
     // авторизация по ролям
     @Override

@@ -32,87 +32,60 @@
 <div class="container">
     <div class="row">
 
-<!--
-        <div class="container" th:each="mapItem : ${pathLine}">
-
-            <div class="col-md-2">
-                <p th:text="${mapItem.key}"></p>
+            <div class="container">
+                <div style="display:inline; float:left; margin:5pt;" th:each="mapItem : ${pathLine}">
+                    <div>
+                        <form class="form-test" th:action="@{/fileBrouser}" method="post">
+                            <input type="hidden" name="direction" th:value="${mapItem.value.path}">
+                            <input type="submit" th:value="${'/ ' + mapItem.value.nameFolder}">
+                        </form>
+                    </div>
+                </div>
             </div>
 
-            <div class="col-md-2">
-                <p th:text="${mapItem.value.nameFolder}"></p>
-            </div>
+            <br>
 
-            <div class="col-md-8">
-                <p th:text="${mapItem.value.path}"></p>
-            </div>
+            <div class="container" th:each="mapItem : ${brouser}">
 
-        </div>
--->
-        <div class="container">
-            <form style="display:inline; float:left; margin:5pt;" class="btn btn-default" method="POST" action="/addFile" enctype="multipart/form-data">
-                <input class="btn btn-default" type="hidden" name="direction" th:value="${direction}">
-                <input class="btn btn-default" type="file" name="file" />
-                <input class="btn btn-default" type="submit" value="Загрузить файл" />
-            </form>
-        </div>
+                <div class="col-md-1">
+                    <img th:src="@{/images/folder32.png}"/>
+                </div>
 
-        <br>
-
-        <div class="container">
-            <div style="display:inline; float:left; margin:5pt;" th:each="mapItem : ${pathLine}">
-                <div>
+                <div class="col-md-5">
                     <form class="form-test" th:action="@{/fileBrouser}" method="post">
-                        <input type="hidden" name="direction" th:value="${mapItem.value.path}">
-                        <input type="submit" th:value="${'/ ' + mapItem.value.nameFolder}">
+                        <input type="hidden" name="direction" th:value="${mapItem.value.path + mapItem.value.name}">
+                        <input type="submit" th:value="${mapItem.value.name}">
                     </form>
                 </div>
-            </div>
-        </div>
 
-        <br>
-
-
-        <div class="container" th:each="mapItem : ${brouser}">
-
-            <div class="col-md-2">
-                <p th:text="${mapItem.key}"></p>
-            </div>
-
-            <div class="col-md-2">
-                <form class="form-test" th:action="@{/fileBrouser}" method="post">
-                    <input type="hidden" name="direction" th:value="${mapItem.value.path + mapItem.value.name}">
-                    <input type="submit" th:value="${mapItem.value.name}">
-                </form>
-            </div>
-
-            <div class="col-md-2">
-                <p th:text="${mapItem.value.type}"></p>
-            </div>
-
-            <div class="col-md-2">
-                <p th:text="${mapItem.value.size}"></p>
-            </div>
-
-            <div class="col-md-4">
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Действие<span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <form class="form-test" th:action="@{/fileBrouser_delete}" method="post">
-                                <input type="hidden" name="direction" th:value="${mapItem.value.path + mapItem.value.name}">
-                                <input type="submit" value="Удалить">
-                            </form>
-                        </li>
-                        <li><a href="#">Скачать</a></li>
-                        <li><a href="#">Свойства</a></li>
-                    </ul>
+                <div class="col-md-2">
+                    <p th:text="${mapItem.value.type}"></p>
                 </div>
+
+                <div class="col-md-2">
+                    <p th:text="${mapItem.value.size}"></p>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Действие<span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <form class="form-test" th:action="@{/fileBrouser_delete}" method="post">
+                                    <input type="hidden" name="direction" th:value="${mapItem.value.path + mapItem.value.name}">
+                                    <input type="submit" value="Удалить">
+                                </form>
+                            </li>
+                            <li><a href="#">Скачать</a></li>
+                            <li><a href="#">Свойства</a></li>
+                        </ul>
+                    </div>
+                </div>
+
             </div>
 
         </div>
 
-    </div>
 </div>
 
 
