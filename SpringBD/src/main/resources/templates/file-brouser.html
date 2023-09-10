@@ -30,9 +30,13 @@
 
 
 <div class="container">
+
     <div class="row">
 
             <div class="container">
+                <div style="display:inline; float:left; margin:5pt;">
+                    <a href="/fileBrouser">..</a>
+                </div>
                 <div style="display:inline; float:left; margin:5pt;" th:each="mapItem : ${pathLine}">
                     <div>
                         <form class="form-test" th:action="@{/fileBrouser}" method="post">
@@ -43,48 +47,123 @@
                 </div>
             </div>
 
-            <br>
 
-            <div class="container" th:each="mapItem : ${brouser}">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th>Тип</th>
+                <th>Размер</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="mapItem : ${brouser}">
 
-                <div class="col-md-1">
-                    <img th:src="@{/images/folder32.png}"/>
-                </div>
+                    <td style="max-width: 30px">
+                        <img th:src="@{/images/folder26.png}"/>
+                    </td>
 
-                <div class="col-md-5">
+
+                    <td>
+                        <form   class="form-test" th:action="@{/fileBrouser}" method="post">
+                            <input type="hidden" name="direction" th:value="${mapItem.value.path + mapItem.value.name}">
+                            <input style="font-weight: bold " type="submit" th:value="${mapItem.value.name}">
+                        </form>
+                    </td>
+
+
+                    <td>
+                        <p th:text="${mapItem.value.type}"></p>
+                    </td>
+
+
+                    <td>
+                        <p th:text="${mapItem.value.size}"></p>
+                    </td>
+
+                    <td>
+                        <form class="form-test" th:action="@{/fileBrouser_delete}" method="post">
+                            <input type="hidden" name="direction" th:value="${mapItem.value.path + mapItem.value.name}">
+                            <input style="color: blue" type="submit" value="Удалить">
+                        </form>
+                    </td>
+
+                    <td>
+                        <form class="form-test" th:action="@{/fileBrouser_save_archiv}" method="post">
+                            <input type="hidden" name="direction" th:value="${mapItem.value.path + mapItem.value.name}">
+                            <input style="color: blue" type="submit" value="Скачать">
+                        </form>
+                    </td>
+
+                    <td>
+                        <form class="form-test" th:action="@{/fileBrouser_deteils}" method="post">
+                            <input type="hidden" name="direction" th:value="${mapItem.value.path + mapItem.value.name}">
+                            <input style="color: blue" type="submit" value="Свойства">
+                        </form>
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+
+<!--
+        <table class="table table-hover">
+
+            <tbody>
+            <tr th:each="mapItem : ${files}">
+
+                <td style="max-width: 30px">
+                    <img th:src="@{/images/file26.png}"/>
+                </td>
+
+
+                <td>
                     <form class="form-test" th:action="@{/fileBrouser}" method="post">
                         <input type="hidden" name="direction" th:value="${mapItem.value.path + mapItem.value.name}">
                         <input type="submit" th:value="${mapItem.value.name}">
                     </form>
-                </div>
+                </td>
 
-                <div class="col-md-2">
+
+                <td>
                     <p th:text="${mapItem.value.type}"></p>
-                </div>
+                </td>
 
-                <div class="col-md-2">
+
+                <td>
                     <p th:text="${mapItem.value.size}"></p>
-                </div>
+                </td>
 
-                <div class="col-md-2">
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Действие<span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <form class="form-test" th:action="@{/fileBrouser_delete}" method="post">
-                                    <input type="hidden" name="direction" th:value="${mapItem.value.path + mapItem.value.name}">
-                                    <input type="submit" value="Удалить">
-                                </form>
-                            </li>
-                            <li><a href="#">Скачать</a></li>
-                            <li><a href="#">Свойства</a></li>
-                        </ul>
-                    </div>
-                </div>
+                <td>
+                    <form class="form-test" th:action="@{/fileBrouser_delete}" method="post">
+                        <input type="hidden" name="direction" th:value="${mapItem.value.path + mapItem.value.name}">
+                        <input type="submit" value="Удалить">
+                    </form>
+                </td>
 
-            </div>
+                <td>
+                    <form class="form-test" th:action="@{/fileBrouser_save}" method="post">
+                        <input type="hidden" name="direction" th:value="${mapItem.value.path + mapItem.value.name}">
+                        <input type="submit" value="Скачать">
+                    </form>
+                </td>
 
-        </div>
+                <td>
+                    <form class="form-test" th:action="@{/fileBrouser_deteils}" method="post">
+                        <input type="hidden" name="direction" th:value="${mapItem.value.path + mapItem.value.name}">
+                        <input type="submit" value="Свойства">
+                    </form>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+-->
+    </div>
 
 </div>
 

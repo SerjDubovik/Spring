@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -27,33 +26,44 @@ public class FileBrouserController {
 
     @PreAuthorize("hasAuthority('developers:write')")
     @GetMapping("/fileBrouser")
-    public String fileBrouser(Model model) {            // @RequestParam String direction,
+    public String fileBrouser(Model model) {        // @RequestParam String direction,
 
         //String path = "/opt/test/";
         String path = "/";
 
-        Map<String, FileView> brouser = new TreeMap<>();
+        Map<String, FileView> folders = new TreeMap<>();
+        Map<String, FileView> files = new TreeMap<>();
+        Map<String, FileView> brouser = new LinkedHashMap<>();
+
 
         File dir = new File(path);                  // определяем объект для каталога
 
         if(dir.isDirectory())
         {
 
-            for(File item : dir.listFiles())       // получаем все вложенные объекты в каталоге
+            for(File item : dir.listFiles())        // получаем все вложенные объекты в каталоге, заполняем две карты сортируя по алвавиту , отдельно для файлов, отдельно для папок
             {
                 if(item.isDirectory())
                 {
-                    brouser.put(item.getName(), new FileView("logo",item.getName(),"folder", "", path));
+                    folders.put(item.getName(), new FileView("folder",item.getName(),"folder", "", path));
                 }else{
-                    brouser.put(item.getName(), new FileView("logo",item.getName(),"file", Long.toString(item.length()) + " Б", ""));
+                    files.put(item.getName(), new FileView("file",item.getName(),"file", Long.toString(item.length()) + " Б", ""));
                 }
             }
+        }
+
+        for(Map.Entry<String, FileView> entry : folders.entrySet()){    // пробегаем по полученным картам и сливаем в одну с неизменным порядком
+            brouser.put(entry.getKey(),entry.getValue());
+        }
+
+        for(Map.Entry<String, FileView> entry : files.entrySet()){
+            brouser.put(entry.getKey(),entry.getValue());
         }
 
         Map<Integer, FileViewAddressPath> pathLine = new LinkedHashMap<>();
 
 
-        String subВirection = path.substring(1);               // обрежем первый слеш в строке, мешает для следующего разбития строки на слова по слеши
+        String subВirection = path.substring(1);    // обрежем первый слеш в строке, мешает для следующего разбития строки на слова по слеши
         String[] words = subВirection.split("/");       // ну и тут строку на слова по слеши
 
         String str = new String();
@@ -78,7 +88,9 @@ public class FileBrouserController {
     @PostMapping("/fileBrouser")
     public String fileBrouser_edit(@RequestParam String direction, Model model) {
 
-        Map<String, FileView> brouser = new TreeMap<>();
+        Map<String, FileView> folders = new TreeMap<>();
+        Map<String, FileView> files = new TreeMap<>();
+        Map<String, FileView> brouser = new LinkedHashMap<>();
 
         System.out.println("Вернулась строка: " + direction);
         // вот тут должна быть проверка валидности строки файлового браузера от не санкционированного перехода !!!
@@ -95,11 +107,19 @@ public class FileBrouserController {
             {
                 if(item.isDirectory())
                 {
-                    brouser.put(item.getName(), new FileView("logo",item.getName(),"folder", "", direction));
+                    folders.put(item.getName(), new FileView("logo",item.getName(),"folder", "", direction));
                 }else{
-                    brouser.put(item.getName(), new FileView("logo",item.getName(),"file", Long.toString(item.length()) + " Б", direction));
+                    files.put(item.getName(), new FileView("logo",item.getName(),"file", Long.toString(item.length()) + " Б", direction));
                 }
             }
+        }
+
+        for(Map.Entry<String, FileView> entry : folders.entrySet()){    // пробегаем по полученным картам и сливаем в одну с неизменным порядком
+            brouser.put(entry.getKey(),entry.getValue());
+        }
+
+        for(Map.Entry<String, FileView> entry : files.entrySet()){
+            brouser.put(entry.getKey(),entry.getValue());
         }
 
         Map<Integer, FileViewAddressPath> pathLine = new LinkedHashMap<>();
@@ -130,7 +150,9 @@ public class FileBrouserController {
     @PostMapping("/fileBrouser_delete")
     public String fileBrouser_delete(@RequestParam String direction, Model model) {
 
-        Map<String, FileView> brouser = new TreeMap<>();
+        Map<String, FileView> folders = new TreeMap<>();
+        Map<String, FileView> files = new TreeMap<>();
+        Map<String, FileView> brouser = new LinkedHashMap<>();
 
 
         File deleteDir = new File(direction);
@@ -153,11 +175,19 @@ public class FileBrouserController {
             {
                 if(item.isDirectory())
                 {
-                    brouser.put(item.getName(), new FileView("logo",item.getName(),"folder", "", directionSub));
+                    folders.put(item.getName(), new FileView("logo",item.getName(),"folder", "", directionSub));
                 }else{
-                    brouser.put(item.getName(), new FileView("logo",item.getName(),"file", Long.toString(item.length()) + " Б", directionSub));
+                    files.put(item.getName(), new FileView("logo",item.getName(),"file", Long.toString(item.length()) + " Б", directionSub));
                 }
             }
+        }
+
+        for(Map.Entry<String, FileView> entry : folders.entrySet()){    // пробегаем по полученным картам и сливаем в одну с неизменным порядком
+            brouser.put(entry.getKey(),entry.getValue());
+        }
+
+        for(Map.Entry<String, FileView> entry : files.entrySet()){
+            brouser.put(entry.getKey(),entry.getValue());
         }
 
         Map<Integer, FileViewAddressPath> pathLine = new LinkedHashMap<>();
@@ -181,6 +211,42 @@ public class FileBrouserController {
         model.addAttribute("brouser", brouser);
         return "file-brouser";
     }
+
+
+
+
+    @PreAuthorize("hasAuthority('developers:write')")
+    @PostMapping("/fileBrouser_save")
+    public String fileBrouser_save(@RequestParam String direction, Model model) {
+
+
+        return "redirect:/fileBrouser";
+    }
+
+    @PreAuthorize("hasAuthority('developers:write')")
+    @PostMapping("/fileBrouser_save_archiv")
+    public String fileBrouser_save_archiv(@RequestParam String direction, Model model) {
+
+
+        return "redirect:/fileBrouser";
+    }
+
+    @PreAuthorize("hasAuthority('developers:write')")
+    @PostMapping("/fileBrouser_deteils")
+    public String fileBrouser_deteils(@RequestParam String direction, Model model) {
+
+
+        return "redirect:/fileBrouser";
+    }
+
+    @PreAuthorize("hasAuthority('developers:write')")
+    @PostMapping("/fileBrouser_create_folder")
+    public String fileBrouser_create_folder(@RequestParam String direction, Model model) {
+
+
+        return "redirect:/fileBrouser";
+    }
+
 
 
     @PreAuthorize("hasAuthority('developers:write')")
