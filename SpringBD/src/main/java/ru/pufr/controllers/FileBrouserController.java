@@ -107,9 +107,9 @@ public class FileBrouserController {
             {
                 if(item.isDirectory())
                 {
-                    folders.put(item.getName(), new FileView("logo",item.getName(),"folder", "", direction));
+                    folders.put(item.getName(), new FileView("folder",item.getName(),"folder", "", direction));
                 }else{
-                    files.put(item.getName(), new FileView("logo",item.getName(),"file", Long.toString(item.length()) + " Б", direction));
+                    files.put(item.getName(), new FileView("file",item.getName(),"file", Long.toString(item.length()) + " Б", direction));
                 }
             }
         }
@@ -175,9 +175,9 @@ public class FileBrouserController {
             {
                 if(item.isDirectory())
                 {
-                    folders.put(item.getName(), new FileView("logo",item.getName(),"folder", "", directionSub));
+                    folders.put(item.getName(), new FileView("folder",item.getName(),"folder", "", directionSub));
                 }else{
-                    files.put(item.getName(), new FileView("logo",item.getName(),"file", Long.toString(item.length()) + " Б", directionSub));
+                    files.put(item.getName(), new FileView("file",item.getName(),"file", Long.toString(item.length()) + " Б", directionSub));
                 }
             }
         }
