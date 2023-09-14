@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.Optional;
 
 @Controller
 public class FileBrouserController {
@@ -45,9 +46,19 @@ public class FileBrouserController {
             {
                 if(item.isDirectory())
                 {
-                    folders.put(item.getName(), new FileView("folder",item.getName(),"folder", "", path));
+                    folders.put(item.getName(), new FileView("folder26.png", item.getName(),"folder", "", path));
                 }else{
-                    files.put(item.getName(), new FileView("file",item.getName(),"file", Long.toString(item.length()) + " Б", ""));
+                    String nameFile = item.getName();
+                    String fileExtension;
+
+                        if(getExtensionByStringHandling(nameFile).isPresent()){     // берем расширение файла в строку
+                            fileExtension = getExtensionByStringHandling(nameFile).get();
+                        }else{
+                            fileExtension = "file extension Not found";
+                        }
+
+                    files.put(item.getName(), new FileView(getNameIcon(fileExtension), item.getName(),"file", Long.toString(item.length()) + " Б", ""));
+                    System.out.println("fileExtension " + fileExtension + " file " + getNameIcon(fileExtension));
                 }
             }
         }
@@ -83,7 +94,6 @@ public class FileBrouserController {
     }
 
 
-
     @PreAuthorize("hasAuthority('developers:write')")
     @PostMapping("/fileBrouser")
     public String fileBrouser_edit(@RequestParam String direction, Model model) {
@@ -107,9 +117,20 @@ public class FileBrouserController {
             {
                 if(item.isDirectory())
                 {
-                    folders.put(item.getName(), new FileView("folder",item.getName(),"folder", "", direction));
+                    folders.put(item.getName(), new FileView("folder26.png",item.getName(),"folder", "", direction));
                 }else{
-                    files.put(item.getName(), new FileView("file",item.getName(),"file", Long.toString(item.length()) + " Б", direction));
+
+                    String nameFile = item.getName();
+                    String fileExtension;
+
+                        if(getExtensionByStringHandling(nameFile).isPresent()){     // берем расширение файла в строку
+                            fileExtension = getExtensionByStringHandling(nameFile).get();
+                        }else{
+                            fileExtension = "file extension Not found";
+                        }
+
+                    files.put(item.getName(), new FileView(getNameIcon(fileExtension), item.getName(),"file", Long.toString(item.length()) + " Б", direction));
+                    System.out.println("fileExtension " + fileExtension + " file " + getNameIcon(fileExtension));
                 }
             }
         }
@@ -175,9 +196,20 @@ public class FileBrouserController {
             {
                 if(item.isDirectory())
                 {
-                    folders.put(item.getName(), new FileView("folder",item.getName(),"folder", "", directionSub));
+                    folders.put(item.getName(), new FileView("folder26.png",item.getName(),"folder", "", directionSub));
                 }else{
-                    files.put(item.getName(), new FileView("file",item.getName(),"file", Long.toString(item.length()) + " Б", directionSub));
+
+                    String nameFile = item.getName();
+                    String fileExtension;
+
+                    if(getExtensionByStringHandling(nameFile).isPresent()){     // берем расширение файла в строку
+                        fileExtension = getExtensionByStringHandling(nameFile).get();
+                    }else{
+                        fileExtension = "file extension Not found";
+                    }
+
+                    files.put(item.getName(), new FileView(getNameIcon(fileExtension), item.getName(),"file", Long.toString(item.length()) + " Б", directionSub));
+                    System.out.println("fileExtension " + fileExtension + " file " + getNameIcon(fileExtension));
                 }
             }
         }
@@ -292,6 +324,40 @@ public class FileBrouserController {
     @GetMapping("/uploadStatus")
     public String uploadStatus() {
         return "uploadStatus";
+    }
+
+
+
+    public Optional<String> getExtensionByStringHandling(String filename) {     // ищет расширение файла в строке
+        return Optional.ofNullable(filename)
+                .filter(f -> f.contains("."))
+                .map(f -> f.substring(filename.lastIndexOf(".") + 1));
+    }
+
+    public String getNameIcon(String name) {
+        String nameIcon = "";
+
+        switch (name){
+            case "png" : case "PNG" :
+            case "jpg" : case "JPG" :
+                nameIcon = "icon_png.png"; break;
+            case "txt" : case "TXT" :
+            case "doc" : case "DOC" :
+            case "docx" : case "DOCX" :
+            case "rtf" : case "RTF" :
+                nameIcon = "icon_txt.png"; break;
+            case "pdf" : case "PDF" :
+                nameIcon = "icon_pdf.ico"; break;
+            case "avi" : case "AVI" :
+            case "mkv" : case "MKV" :
+                nameIcon = "icon_avi.png"; break;
+            case "html" : case "HTML" :
+                nameIcon = "icon_html.png"; break;
+            default:
+                nameIcon = "icon_default.png"; break;
+        }
+
+        return nameIcon;
     }
 
 
