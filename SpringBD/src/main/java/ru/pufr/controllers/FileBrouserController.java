@@ -46,7 +46,7 @@ public class FileBrouserController {
             {
                 if(item.isDirectory())
                 {
-                    folders.put(item.getName(), new FileView("folder26.png", item.getName(),"folder", "", path));
+                    folders.put(item.getName(), new FileView("folder.ico", item.getName(),"folder", "", path));
                 }else{
                     String nameFile = item.getName();
                     String fileExtension;
@@ -117,7 +117,7 @@ public class FileBrouserController {
             {
                 if(item.isDirectory())
                 {
-                    folders.put(item.getName(), new FileView("folder26.png",item.getName(),"folder", "", direction));
+                    folders.put(item.getName(), new FileView("folder.ico",item.getName(),"folder", "", direction));
                 }else{
 
                     String nameFile = item.getName();
@@ -196,7 +196,7 @@ public class FileBrouserController {
             {
                 if(item.isDirectory())
                 {
-                    folders.put(item.getName(), new FileView("folder26.png",item.getName(),"folder", "", directionSub));
+                    folders.put(item.getName(), new FileView("folder.ico",item.getName(),"folder", "", directionSub));
                 }else{
 
                     String nameFile = item.getName();
@@ -340,19 +340,59 @@ public class FileBrouserController {
         switch (name){
             case "png" : case "PNG" :
             case "jpg" : case "JPG" :
-                nameIcon = "icon_png.png"; break;
+            case "jif" : case "JIF" :
+            case "tif" : case "TIF" :
+                nameIcon = "icon_image.ico"; break;
             case "txt" : case "TXT" :
+                nameIcon = "icon_txt.ico"; break;
+            case "pdf" : case "PDF" :
+                nameIcon = "icon_pdf.ico"; break;
+            case "mkv" : case "MKV" :
+                nameIcon = "icon_mkv.ico"; break;
+            case "avi" : case "AVI" :
+                nameIcon = "icon_avi.ico"; break;
+            case "html" : case "HTML" :
+                nameIcon = "icon_html.ico"; break;
+            case "rar" : case "RAR" :
+            case "zip" : case "ZIP" :
+            case "war" : case "WAR" :
+            case "jar" : case "JAR" :
+                nameIcon = "icon_rar.ico"; break;
+            case "7z" : case "7Z" :
+                nameIcon = "icon_7zip.ico"; break;
+            case "psd" : case "PSD" :
+                nameIcon = "icon_psd.ico"; break;
+            case "ini" : case "INI" :
+                nameIcon = "icon_ini.ico"; break;
+            case "wmp" : case "WMP" :
+                nameIcon = "icon_wmp.ico"; break;
+            case "torrent" : case "TORRENT" :
+                nameIcon = "icon_uTorrent.ico"; break;
+            case "mp3" : case "MP3" :
+                nameIcon = "icon_mp3.ico"; break;
+
+            case "xlsx" : case "XLSX" :     // иконки офиса
+            case "xlsm" : case "XLSM" :
+            case "xlsb" : case "XLSB" :
+            case "xltx" : case "XLTX" :
+            case "xltm" : case "XLTM" :
+            case "xls" : case "XLS" :
+            case "xlt" : case "XLT" :
+            case "xml" : case "XML" :
+            case "xlam" : case "XLAM" :
+            case "xla" : case "XLA" :
+            case "xlw" : case "XLW" :
+            case "xlr" : case "XLR" :
+            case "csv" : case "CSV" :
+                nameIcon = "icon_exel.ico"; break;
             case "doc" : case "DOC" :
             case "docx" : case "DOCX" :
             case "rtf" : case "RTF" :
-                nameIcon = "icon_txt.png"; break;
-            case "pdf" : case "PDF" :
-                nameIcon = "icon_pdf.ico"; break;
-            case "avi" : case "AVI" :
-            case "mkv" : case "MKV" :
-                nameIcon = "icon_avi.png"; break;
-            case "html" : case "HTML" :
-                nameIcon = "icon_html.png"; break;
+                nameIcon = "icon_word.ico"; break;
+/*
+            case "" : case "" :
+                nameIcon = ""; break;
+*/
             default:
                 nameIcon = "icon_default.png"; break;
         }
