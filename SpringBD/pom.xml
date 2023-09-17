@@ -22,6 +22,7 @@
     <maven.compiler.target>17</maven.compiler.target>
     <java.version>17</java.version>
     <bootstrap.version>4.2.1</bootstrap.version>
+    <telegrambots-spring.version>0.25</telegrambots-spring.version>
   </properties>
 
   <dependencies>
@@ -105,12 +106,16 @@
 
 
     <dependency>
-      <groupId>org.telegram</groupId>
-      <artifactId>telegrambots</artifactId>
-      <version>6.8.0</version>
+      <groupId>com.github.xabgesagtx</groupId>
+      <artifactId>telegram-spring-boot-starter</artifactId>
+      <version>${telegrambots-spring.version}</version>
     </dependency>
 
-
+    <dependency>
+      <groupId>org.telegram</groupId>
+      <artifactId>telegrambots</artifactId>
+      <version>4.6</version>
+    </dependency>
 
   </dependencies>
 
