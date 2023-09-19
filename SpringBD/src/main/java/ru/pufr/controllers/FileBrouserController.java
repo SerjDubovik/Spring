@@ -24,68 +24,17 @@ import java.util.Optional;
 public class FileBrouserController {
 
 
-
     @PreAuthorize("hasAuthority('developers:write')")
     @GetMapping("/fileBrouser")
-    public String fileBrouser(Model model) {        // @RequestParam String direction,
+    public String fileBrouser(Model model) {
 
         //String path = "/opt/test/";
         String path = "/";
 
-        Map<String, FileView> folders = new TreeMap<>();
-        Map<String, FileView> files = new TreeMap<>();
-        Map<String, FileView> brouser = new LinkedHashMap<>();
 
+        Map<String, FileView> brouser = fb(path);
+        Map<Integer, FileViewAddressPath> pathLine = pathLineCreate(path);
 
-        File dir = new File(path);                  // определяем объект для каталога
-
-        if(dir.isDirectory())
-        {
-
-            for(File item : dir.listFiles())        // получаем все вложенные объекты в каталоге, заполняем две карты сортируя по алвавиту , отдельно для файлов, отдельно для папок
-            {
-                if(item.isDirectory())
-                {
-                    folders.put(item.getName(), new FileView("folder.ico", item.getName(),"folder", "", path));
-                }else{
-                    String nameFile = item.getName();
-                    String fileExtension;
-
-                        if(getExtensionByStringHandling(nameFile).isPresent()){     // берем расширение файла в строку
-                            fileExtension = getExtensionByStringHandling(nameFile).get();
-                        }else{
-                            fileExtension = "file extension Not found";
-                        }
-
-                    files.put(item.getName(), new FileView(getNameIcon(fileExtension), item.getName(),"file", Long.toString(item.length()) + " Б", ""));
-                    System.out.println("fileExtension " + fileExtension + " file " + getNameIcon(fileExtension));
-                }
-            }
-        }
-
-        for(Map.Entry<String, FileView> entry : folders.entrySet()){    // пробегаем по полученным картам и сливаем в одну с неизменным порядком
-            brouser.put(entry.getKey(),entry.getValue());
-        }
-
-        for(Map.Entry<String, FileView> entry : files.entrySet()){
-            brouser.put(entry.getKey(),entry.getValue());
-        }
-
-        Map<Integer, FileViewAddressPath> pathLine = new LinkedHashMap<>();
-
-
-        String subВirection = path.substring(1);    // обрежем первый слеш в строке, мешает для следующего разбития строки на слова по слеши
-        String[] words = subВirection.split("/");       // ну и тут строку на слова по слеши
-
-        String str = new String();
-
-        int i = 0;
-
-        for(String word : words){
-            str = str + "/" + word;
-            pathLine.put(i, new FileViewAddressPath(word, str));
-            i++;
-        }
 
         model.addAttribute("direction", path);
         model.addAttribute("pathLine", pathLine);
@@ -96,68 +45,12 @@ public class FileBrouserController {
 
     @PreAuthorize("hasAuthority('developers:write')")
     @PostMapping("/fileBrouser")
-    public String fileBrouser_edit(@RequestParam String direction, Model model) {
+    public String fileBrouser(@RequestParam String direction, Model model) {
 
-        Map<String, FileView> folders = new TreeMap<>();
-        Map<String, FileView> files = new TreeMap<>();
-        Map<String, FileView> brouser = new LinkedHashMap<>();
+        // тут должна быть проверка пути на валидность
 
-        System.out.println("Вернулась строка: " + direction);
-        // вот тут должна быть проверка валидности строки файлового браузера от не санкционированного перехода !!!
-
-        File dir = new File(direction);                  // определяем объект для каталога
-
-        direction = direction + "/";
-
-        if(dir.isDirectory())
-        {
-            int i = 0;
-
-            for(File item : dir.listFiles())       // получаем все вложенные объекты в каталоге
-            {
-                if(item.isDirectory())
-                {
-                    folders.put(item.getName(), new FileView("folder.ico",item.getName(),"folder", "", direction));
-                }else{
-
-                    String nameFile = item.getName();
-                    String fileExtension;
-
-                        if(getExtensionByStringHandling(nameFile).isPresent()){     // берем расширение файла в строку
-                            fileExtension = getExtensionByStringHandling(nameFile).get();
-                        }else{
-                            fileExtension = "file extension Not found";
-                        }
-
-                    files.put(item.getName(), new FileView(getNameIcon(fileExtension), item.getName(),"file", Long.toString(item.length()) + " Б", direction));
-                    System.out.println("fileExtension " + fileExtension + " file " + getNameIcon(fileExtension));
-                }
-            }
-        }
-
-        for(Map.Entry<String, FileView> entry : folders.entrySet()){    // пробегаем по полученным картам и сливаем в одну с неизменным порядком
-            brouser.put(entry.getKey(),entry.getValue());
-        }
-
-        for(Map.Entry<String, FileView> entry : files.entrySet()){
-            brouser.put(entry.getKey(),entry.getValue());
-        }
-
-        Map<Integer, FileViewAddressPath> pathLine = new LinkedHashMap<>();
-
-
-        String subВirection = direction.substring(1);            // обрежем первый слеш в строке, мешает для следующего разбития строки на слова по слеши
-        String[] words = subВirection.split("/");       // ну и тут строку на слова по слеши
-
-        String str = new String();
-
-        int i = 0;
-
-        for(String word : words){
-            str = str + "/" + word;
-            pathLine.put(i, new FileViewAddressPath(word, str));
-            i++;
-        }
+        Map<String, FileView> brouser = fb(direction);
+        Map<Integer, FileViewAddressPath> pathLine = pathLineCreate(direction);
 
         model.addAttribute("direction", direction);
         model.addAttribute("pathLine", pathLine);
@@ -171,10 +64,7 @@ public class FileBrouserController {
     @PostMapping("/fileBrouser_delete")
     public String fileBrouser_delete(@RequestParam String direction, Model model) {
 
-        Map<String, FileView> folders = new TreeMap<>();
-        Map<String, FileView> files = new TreeMap<>();
-        Map<String, FileView> brouser = new LinkedHashMap<>();
-
+        // написать механизм для подтверждения удаления
 
         File deleteDir = new File(direction);
         deleteDir.delete();
@@ -183,62 +73,13 @@ public class FileBrouserController {
         int index = direction.lastIndexOf('/');
         String directionSub = direction.substring(0,index);
 
-        File dir = new File(directionSub);                  // определяем объект для каталога
-
         directionSub = directionSub + "/";
 
-        if(dir.isDirectory())
-        {
-
-            int i = 0;
-
-            for(File item : dir.listFiles())       // получаем все вложенные объекты в каталоге
-            {
-                if(item.isDirectory())
-                {
-                    folders.put(item.getName(), new FileView("folder.ico",item.getName(),"folder", "", directionSub));
-                }else{
-
-                    String nameFile = item.getName();
-                    String fileExtension;
-
-                    if(getExtensionByStringHandling(nameFile).isPresent()){     // берем расширение файла в строку
-                        fileExtension = getExtensionByStringHandling(nameFile).get();
-                    }else{
-                        fileExtension = "file extension Not found";
-                    }
-
-                    files.put(item.getName(), new FileView(getNameIcon(fileExtension), item.getName(),"file", Long.toString(item.length()) + " Б", directionSub));
-                    System.out.println("fileExtension " + fileExtension + " file " + getNameIcon(fileExtension));
-                }
-            }
-        }
-
-        for(Map.Entry<String, FileView> entry : folders.entrySet()){    // пробегаем по полученным картам и сливаем в одну с неизменным порядком
-            brouser.put(entry.getKey(),entry.getValue());
-        }
-
-        for(Map.Entry<String, FileView> entry : files.entrySet()){
-            brouser.put(entry.getKey(),entry.getValue());
-        }
-
-        Map<Integer, FileViewAddressPath> pathLine = new LinkedHashMap<>();
+        Map<String, FileView> brouser = fb(directionSub);
+        Map<Integer, FileViewAddressPath> pathLine = pathLineCreate(directionSub);
 
 
-        String subВirection = directionSub.substring(1);            // обрежем первый слеш в строке, мешает для следующего разбития строки на слова по слеши
-        String[] words = subВirection.split("/");       // ну и тут строку на слова по слеши
-
-        String str = new String();
-
-        int i = 0;
-
-        for(String word : words){
-            str = str + "/" + word;
-            pathLine.put(i, new FileViewAddressPath(word, str));
-            i++;
-        }
-
-        model.addAttribute("direction", subВirection);
+        model.addAttribute("direction", directionSub);
         model.addAttribute("pathLine", pathLine);
         model.addAttribute("brouser", brouser);
         return "file-brouser";
@@ -263,13 +104,24 @@ public class FileBrouserController {
         return "redirect:/fileBrouser";
     }
 
+
+
     @PreAuthorize("hasAuthority('developers:write')")
     @PostMapping("/fileBrouser_deteils")
     public String fileBrouser_deteils(@RequestParam String direction, Model model) {
 
+        Map<String, FileView> brouser = fbDetails(direction);
+        Map<Integer, FileViewAddressPath> pathLine = pathLineCreate(direction);
 
-        return "redirect:/fileBrouser";
+
+        model.addAttribute("direction", direction);
+        model.addAttribute("pathLine", pathLine);
+        model.addAttribute("brouser", brouser);
+        //return "file-brouser-details";
+        return "file-brouser";
     }
+
+
 
     @PreAuthorize("hasAuthority('developers:write')")
     @PostMapping("/fileBrouser_create_folder")
@@ -327,6 +179,132 @@ public class FileBrouserController {
     }
 
 
+    private Map<String, FileView> fb(String path) {              // метод, возвращает списки файлов и папок для отображения на вьюшке.
+
+        Map<String, FileView> folders = new TreeMap<>();
+        Map<String, FileView> files = new TreeMap<>();
+        Map<String, FileView> fileExplorer = new LinkedHashMap<>();
+
+
+        File dir = new File(path);                  // определяем объект для каталога
+
+        if(dir.isDirectory())
+        {
+
+            for(File item : dir.listFiles())        // получаем все вложенные объекты в каталоге, заполняем две карты сортируя по алвавиту , отдельно для файлов, отдельно для папок
+            {
+                if(item.isDirectory())
+                {
+                    folders.put(item.getName(), new FileView("folder.ico", item.getName(),"folder", "", path));
+                }else{
+                    String nameFile = item.getName();
+                    String fileExtension;
+
+                    if(getExtensionByStringHandling(nameFile).isPresent()){     // берем расширение файла в строку
+                        fileExtension = getExtensionByStringHandling(nameFile).get();
+                    }else{
+                        fileExtension = "file extension Not found";
+                    }
+
+                    Long fileLength = null;
+                    String QnByte = "Б";
+
+                    if((item.length() >= 0) && (item.length() <= 1023)){
+                        QnByte = "Б";
+                    }
+                    if((item.length() >= 1024) && (item.length() <= 1_048_575)) {
+                        QnByte = "КБ";
+                        fileLength = item.length() / 1000;
+                    }
+                    if((item.length() >= 1_048_576) && (item.length() <= 1_073_741_823)) {
+                        QnByte = "МБ";
+                        fileLength = item.length() / 1_000_000;
+                    }
+                    if((item.length() > 1_073_741_823)) {
+                        QnByte = "ГБ";
+                        fileLength = item.length() / 1_000_000_000;
+                    }
+
+                    files.put(item.getName(), new FileView(getNameIcon(fileExtension), item.getName(),"file", fileLength + " " + QnByte, ""));
+                }
+            }
+        }
+
+        for(Map.Entry<String, FileView> entry : folders.entrySet()){    // пробегаем по полученным картам и сливаем в одну с неизменным порядком
+            fileExplorer.put(entry.getKey(),entry.getValue());
+        }
+
+        for(Map.Entry<String, FileView> entry : files.entrySet()){
+            fileExplorer.put(entry.getKey(),entry.getValue());
+        }
+
+        return fileExplorer;
+    }
+
+    private Map<Integer, FileViewAddressPath> pathLineCreate(String path) {             // метод, возвращает адресную строку в виде массива для отображения на вьюшке
+
+        Map<Integer, FileViewAddressPath> pathLine = new LinkedHashMap<>();
+
+        String subВirection = path.substring(1);    // обрежем первый слеш в строке, мешает для следующего разбития строки на слова по слеши
+        String[] words = subВirection.split("/");       // ну и тут строку на слова по слеши
+
+        String str = new String();
+
+        int i = 0;
+
+        for(String word : words){
+            str = str + "/" + word;
+            pathLine.put(i, new FileViewAddressPath(word, str));
+            i++;
+        }
+
+        return pathLine;
+    }
+
+
+    private Map<String, FileView> fbDetails(String path) {              // метод, возвращает детальное описание файла или папки
+
+        Map<String, FileView> fileExplorer = new LinkedHashMap<>();
+
+        File dir = new File(path);                  // определяем объект для каталога
+
+        if(dir.isDirectory())
+        {
+            fileExplorer.put(dir.getName(), new FileView("folder.ico", dir.getName(),"folder", "", path));
+        }else{
+            String nameFile = dir.getName();
+            String fileExtension;
+
+            if(getExtensionByStringHandling(nameFile).isPresent()){     // берем расширение файла в строку
+                fileExtension = getExtensionByStringHandling(nameFile).get();
+            }else{
+                fileExtension = "file extension Not found";
+            }
+
+            Long fileLength = null;
+            String QnByte = "Б";
+
+            if((dir.length() >= 0) && (dir.length() <= 1023)){
+                QnByte = "Б";
+            }
+            if((dir.length() >= 1024) && (dir.length() <= 1_048_575)) {
+                QnByte = "КБ";
+                fileLength = dir.length() / 1000;
+            }
+            if((dir.length() >= 1_048_576) && (dir.length() <= 1_073_741_823)) {
+                QnByte = "МБ";
+                fileLength = dir.length() / 1_000_000;
+            }
+            if((dir.length() > 1_073_741_823)) {
+                QnByte = "ГБ";
+                fileLength = dir.length() / 1_000_000_000;
+            }
+
+            fileExplorer.put(dir.getName(), new FileView(getNameIcon(fileExtension), dir.getName(),"file", fileLength + " " + QnByte, ""));
+        }
+
+        return fileExplorer;
+    }
 
     public Optional<String> getExtensionByStringHandling(String filename) {     // ищет расширение файла в строке
         return Optional.ofNullable(filename)

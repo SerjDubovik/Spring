@@ -39,8 +39,11 @@ public class Bot extends TelegramLongPollingBot {
                 String userName = update.getMessage().getChat().getUserName();
                 startCommand(chatId, userName);
             }
+            case HELP -> helpCommand(chatId);
+            default -> unknownCommand(chatId);
         }
     }
+
 
     @Override
     public String getBotUsername() {
@@ -57,6 +60,17 @@ public class Bot extends TelegramLongPollingBot {
         sendMessage(chatId, formattedText);
     }
 
+    private void helpCommand(Long chatId) {
+        var text = """
+                Справочная информация по боту                
+                """;
+        sendMessage(chatId, text);
+    }
+
+    private void unknownCommand(Long chatId) {
+        var text = "Не удалось распознать команду!";
+        sendMessage(chatId, text);
+    }
 
     private void sendMessage(Long chatId, String text) {
         var chatIdStr = String.valueOf(chatId);
