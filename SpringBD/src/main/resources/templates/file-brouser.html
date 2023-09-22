@@ -87,7 +87,7 @@
                                 </form>
                             </div>
                             <div th:case="'file'">
-                                <form   class="form-test" th:action="@{/fileBrouser}" method="post">
+                                <form   class="form-test" th:action="@{/fileBrouser_file}" method="post">
                                     <input type="hidden" name="direction" th:value="${mapItem.value.path + mapItem.value.name}">
                                     <input style="font-weight: normal " type="submit" th:value="${mapItem.value.name}">
                                 </form>

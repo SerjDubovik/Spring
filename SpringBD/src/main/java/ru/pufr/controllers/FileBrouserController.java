@@ -27,7 +27,8 @@ public class FileBrouserController {
     @PreAuthorize("hasAuthority('developers:write')")
     @GetMapping("/fileBrouser")
     public String fileBrouser(Model model) {
-
+        //Метод startsWith() позволяют определить начинается ли строка с определенной подстроки
+        // тут должна быть проверка пути на валидность
         //String path = "/opt/test/";
         String path = "/";
 
@@ -49,6 +50,8 @@ public class FileBrouserController {
 
         // тут должна быть проверка пути на валидность
 
+        direction = direction + "/";
+
         Map<String, FileView> brouser = fb(direction);
         Map<Integer, FileViewAddressPath> pathLine = pathLineCreate(direction);
 
@@ -56,6 +59,37 @@ public class FileBrouserController {
         model.addAttribute("pathLine", pathLine);
         model.addAttribute("brouser", brouser);
         return "file-brouser";
+    }
+
+
+    @PreAuthorize("hasAuthority('developers:write')")           // передаёт страницу для редактирования и просмотра файлов, если поддерживается
+    @PostMapping("/fileBrouser_file")
+    public String fileBrouserFile(@RequestParam String direction, Model model) {
+
+        // тут должна быть проверка пути на валидность
+
+
+        File dir = new File(direction);                  // определяем объект для каталога
+
+        String nameFile = dir.getName();
+        String fileExtension;
+
+        if(getExtensionByStringHandling(nameFile).isPresent()){     // берем расширение файла в строку
+            fileExtension = getExtensionByStringHandling(nameFile).get();
+        }else{
+            fileExtension = "file extension Not found";
+        }
+
+        int lastSlesh = direction.lastIndexOf('/');     // находим номер по порядку последнего слеша в адресе
+        String subDirection = direction.substring(lastSlesh);   // обрезаем из пути имя выбранного объекта
+        direction = direction.replace(subDirection, "");    // заменяем в пути имя выбранного объекта пустотой. (поискать решение по красивее)
+
+        Map<Integer, FileViewAddressPath> pathLine = pathLineCreate(direction);
+
+        model.addAttribute("nameFile", nameFile);
+        model.addAttribute("fileExtension", fileExtension);
+        model.addAttribute("pathLine", pathLine);
+        return "file-brouserFile";
     }
 
 
@@ -96,6 +130,9 @@ public class FileBrouserController {
         return "redirect:/fileBrouser";
     }
 
+
+
+
     @PreAuthorize("hasAuthority('developers:write')")
     @PostMapping("/fileBrouser_save_archiv")
     public String fileBrouser_save_archiv(@RequestParam String direction, Model model) {
@@ -106,9 +143,12 @@ public class FileBrouserController {
 
 
 
-    @PreAuthorize("hasAuthority('developers:write')")
+
+    @PreAuthorize("hasAuthority('developers:write')")           // отдает страницу с детальным описанием файла или каталога
     @PostMapping("/fileBrouser_deteils")
     public String fileBrouser_deteils(@RequestParam String direction, Model model) {
+
+        direction = direction + "/";
 
         Map<String, FileView> brouser = fbDetails(direction);
         Map<Integer, FileViewAddressPath> pathLine = pathLineCreate(direction);
@@ -117,9 +157,11 @@ public class FileBrouserController {
         model.addAttribute("direction", direction);
         model.addAttribute("pathLine", pathLine);
         model.addAttribute("brouser", brouser);
-        //return "file-brouser-details";
-        return "file-brouser";
+
+        return "file-brouser-details";
     }
+
+
 
 
 
@@ -130,6 +172,8 @@ public class FileBrouserController {
 
         return "redirect:/fileBrouser";
     }
+
+
 
 
 
@@ -172,11 +216,13 @@ public class FileBrouserController {
 
 
 
+
     @PreAuthorize("hasAuthority('developers:write')")
     @GetMapping("/uploadStatus")
     public String uploadStatus() {
         return "uploadStatus";
     }
+
 
 
     private Map<String, FileView> fb(String path) {              // метод, возвращает списки файлов и папок для отображения на вьюшке.
@@ -225,7 +271,7 @@ public class FileBrouserController {
                         fileLength = item.length() / 1_000_000_000;
                     }
 
-                    files.put(item.getName(), new FileView(getNameIcon(fileExtension), item.getName(),"file", fileLength + " " + QnByte, ""));
+                    files.put(item.getName(), new FileView(getNameIcon(fileExtension), item.getName(),"file", fileLength + " " + QnByte, path));
                 }
             }
         }
@@ -245,8 +291,8 @@ public class FileBrouserController {
 
         Map<Integer, FileViewAddressPath> pathLine = new LinkedHashMap<>();
 
-        String subВirection = path.substring(1);    // обрежем первый слеш в строке, мешает для следующего разбития строки на слова по слеши
-        String[] words = subВirection.split("/");       // ну и тут строку на слова по слеши
+        String subDirection = path.substring(1);    // обрежем первый слеш в строке, мешает для следующего разбития строки на слова по слеши
+        String[] words = subDirection.split("/");       // ну и тут строку на слова по слеши
 
         String str = new String();
 

@@ -32,7 +32,6 @@
 <div class="container">
 
   <div class="row">
-
     <div class="container">
       <div style="display:inline; float:left; margin:5pt;">
         <a href="/fileBrouser">..</a>
@@ -48,8 +47,10 @@
     </div>
 
     <br>
-    <p>Подробная инфа об объекте</p>
+    <p>Тут будет радактироватся и просматриватся файл, если поддерживается формат</p>
     <br>
+    <p th:text="${nameFile}"></p>
+    <p th:text="${fileExtension}"></p>
 
   </div>
 
