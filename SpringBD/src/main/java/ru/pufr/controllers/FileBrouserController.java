@@ -1,5 +1,9 @@
 package ru.pufr.controllers;
 
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import ru.pufr.models.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
@@ -11,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.stereotype.Controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,9 +32,9 @@ public class FileBrouserController {
     @PreAuthorize("hasAuthority('developers:write')")
     @GetMapping("/fileBrouser")
     public String fileBrouser(Model model) {
-        //Метод startsWith() позволяют определить начинается ли строка с определенной подстроки
+        // Метод startsWith() позволяют определить начинается ли строка с определенной подстроки
         // тут должна быть проверка пути на валидность
-        //String path = "/opt/test/";
+        // String path = "/opt/test/";
         String path = "/";
 
 
@@ -93,6 +98,24 @@ public class FileBrouserController {
     }
 
 
+    @PreAuthorize("hasAuthority('developers:write')")           // отдает страницу с детальным описанием файла или каталога
+    @PostMapping("/fileBrouser_folder")
+    public String fileBrouser_deteils(@RequestParam String direction, Model model) {
+
+        direction = direction + "/";
+
+        Map<String, FileView> brouser = fbDetails(direction);
+        Map<Integer, FileViewAddressPath> pathLine = pathLineCreate(direction);
+
+
+        model.addAttribute("direction", direction);
+        model.addAttribute("pathLine", pathLine);
+        model.addAttribute("brouser", brouser);
+
+        return "file-brouser-details";
+    }
+
+
 
     @PreAuthorize("hasAuthority('developers:write')")
     @PostMapping("/fileBrouser_delete")
@@ -122,14 +145,27 @@ public class FileBrouserController {
 
 
 
-    @PreAuthorize("hasAuthority('developers:write')")
+    @PreAuthorize("hasAuthority('developers:write')")           // метод скачивает указанный файл
     @PostMapping("/fileBrouser_save")
-    public String fileBrouser_save(@RequestParam String direction, Model model) {
+    public ResponseEntity<Object> fileBrouser_save(@RequestParam String direction, Model model) throws IOException {
 
+        System.out.println(direction);
 
-        return "redirect:/fileBrouser";
+        File file = new File(direction);
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getName()));
+        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        headers.add("Pragma", "no-cache");
+        headers.add("Expires", "0");
+
+        ResponseEntity<Object>
+                responseEntity = ResponseEntity.ok().headers(headers).contentLength(
+                file.length()).contentType(MediaType.parseMediaType("application/txt")).body(resource);
+
+        return responseEntity;
     }
-
 
 
 
@@ -140,27 +176,6 @@ public class FileBrouserController {
 
         return "redirect:/fileBrouser";
     }
-
-
-
-
-    @PreAuthorize("hasAuthority('developers:write')")           // отдает страницу с детальным описанием файла или каталога
-    @PostMapping("/fileBrouser_deteils")
-    public String fileBrouser_deteils(@RequestParam String direction, Model model) {
-
-        direction = direction + "/";
-
-        Map<String, FileView> brouser = fbDetails(direction);
-        Map<Integer, FileViewAddressPath> pathLine = pathLineCreate(direction);
-
-
-        model.addAttribute("direction", direction);
-        model.addAttribute("pathLine", pathLine);
-        model.addAttribute("brouser", brouser);
-
-        return "file-brouser-details";
-    }
-
 
 
 
@@ -257,6 +272,7 @@ public class FileBrouserController {
 
                     if((item.length() >= 0) && (item.length() <= 1023)){
                         QnByte = "Б";
+                        fileLength = item.length();
                     }
                     if((item.length() >= 1024) && (item.length() <= 1_048_575)) {
                         QnByte = "КБ";
@@ -332,6 +348,8 @@ public class FileBrouserController {
 
             if((dir.length() >= 0) && (dir.length() <= 1023)){
                 QnByte = "Б";
+                fileLength = dir.length();
+
             }
             if((dir.length() >= 1024) && (dir.length() <= 1_048_575)) {
                 QnByte = "КБ";
