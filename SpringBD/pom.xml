@@ -17,12 +17,16 @@
   </parent>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <encoding.type>UTF-8</encoding.type>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <java.version>17</java.version>
     <bootstrap.version>4.2.1</bootstrap.version>
     <telegrambots-spring.version>0.25</telegrambots-spring.version>
+
+    <project.build.sourceEncoding>${encoding.type}</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>${encoding.type</project.reporting.outputEncoding>
+    <file.encoding>${encoding.type}</file.encoding>
   </properties>
 
   <dependencies>

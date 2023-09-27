@@ -4,6 +4,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import ru.pufr.models.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
@@ -149,13 +150,16 @@ public class FileBrouserController {
     @PostMapping("/fileBrouser_save")
     public ResponseEntity<Object> fileBrouser_save(@RequestParam String direction, Model model) throws IOException {
 
-        System.out.println(direction);
-
         File file = new File(direction);
         InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+
         HttpHeaders headers = new HttpHeaders();
 
-        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getName()));
+        String str = new String(file.getName().getBytes("UTF-8"),"UTF-8");
+
+        System.out.println(str);
+
+        headers.add("Content-Disposition", "attachment; filename=" + str);   //String.format("attachment; filename=\"%s\"", file.getName())
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
@@ -181,8 +185,43 @@ public class FileBrouserController {
 
 
     @PreAuthorize("hasAuthority('developers:write')")
-    @PostMapping("/fileBrouser_create_folder")
+    @PostMapping("/fileBrouser_create_folder_blanc")
     public String fileBrouser_create_folder(@RequestParam String direction, Model model) {
+
+        direction = direction + "/";
+
+        Map<String, FileView> brouser = fb(direction);
+        Map<Integer, FileViewAddressPath> pathLine = pathLineCreate(direction);
+
+        model.addAttribute("direction", direction);
+        model.addAttribute("pathLine", pathLine);
+        model.addAttribute("brouser", brouser);
+        return "fileBrouser-CreateFolder";
+    }
+
+
+
+    @PreAuthorize("hasAuthority('developers:write')")
+    @PostMapping("/fileBrouser_create_folder")
+    public String fileBrouser_create_folder(@RequestParam String direction, @RequestParam String nameFolder, Model model) {
+
+        // boolean mkdir(): создает новый каталог и при удачном создании возвращает значение true
+
+        File dir = new File(direction + "/" + nameFolder);
+
+        boolean created = dir.mkdir();
+        if(created)
+            System.out.println("Folder has been created");
+
+        return "redirect:/fileBrouser";
+    }
+
+
+    @PreAuthorize("hasAuthority('developers:write')")
+    @PostMapping("/fileBrouser_rename_folder")
+    public String fileBrouser_rename_folder(@RequestParam String direction, @RequestParam String nameFolder, Model model) {
+
+        // boolean renameTo(File dest): переименовывает файл или каталог
 
 
         return "redirect:/fileBrouser";

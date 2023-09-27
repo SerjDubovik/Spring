@@ -3,7 +3,7 @@
 
 <head>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
@@ -48,6 +48,15 @@
             </div>
 
 
+        <div class="container">
+
+            <div class="col-md-2">
+                <p>Кнопка "создать папку"</p>
+            </div>
+
+        </div>
+
+
         <table class="table table-hover">
             <thead>
             <tr>
@@ -62,18 +71,7 @@
             </thead>
             <tbody>
                 <tr th:each="mapItem : ${brouser}">
-<!--
-                    <td>
-                        <div th:switch="${mapItem.value.logo}">
-                            <div th:case="'folder'">
-                                <img th:src="@{/images/icon/folder26.png}"/>
-                            </div>
-                            <div th:case="'file'">
-                                <img th:src="@{/images/icon/file26.png}"/>
-                            </div>
-                        </div>
-                    </td>
--->
+
                     <td>
                         <img style="max-height: 26px; max-width: 26px" th:src="${'/images/icon/' + mapItem.value.logo}"/>
                     </td>
@@ -81,13 +79,13 @@
                     <td>
                         <div th:switch="${mapItem.value.type}">
                         <div th:case="'folder'">
-                            <form   class="form-test" th:action="@{/fileBrouser}" method="post">
+                            <form class="form-test" th:action="@{/fileBrouser}" method="post">
                                 <input type="hidden" name="direction" th:value="${mapItem.value.path + mapItem.value.name}">
                                 <input style="font-weight: bold " type="submit" th:value="${mapItem.value.name}">
                             </form>
                         </div>
                         <div th:case="'file'">
-                            <form   class="form-test" th:action="@{/fileBrouser_file}" method="post">
+                            <form class="form-test" th:action="@{/fileBrouser_file}" method="post">
                                 <input type="hidden" name="direction" th:value="${mapItem.value.path + mapItem.value.name}">
                                 <input style="font-weight: normal " type="submit" th:value="${mapItem.value.name}">
                             </form>
