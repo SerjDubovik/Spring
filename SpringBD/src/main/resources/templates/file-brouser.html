@@ -94,6 +94,41 @@
             </div>
         </div>
 
+        <br>
+
+        <div  th:each="mapItem : ${message}">
+            <div th:switch="${mapItem.value.type}">
+                <div th:case="'null'">
+                </div>
+                <div th:case="'SUCCESS'">
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Закрыть"><span aria-hidden="true">&times;</span></button>
+                        <p th:text="${mapItem.value.message}"></p>
+                    </div>
+                </div>
+                <div th:case="'INFO'">
+                    <div class="alert alert-info alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Закрыть"><span aria-hidden="true">&times;</span></button>
+                        <p th:text="${mapItem.value.message}"></p>
+                    </div>
+                </div>
+                <div th:case="'WARNING'">
+                    <div class="alert alert-warning alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Закрыть"><span aria-hidden="true">&times;</span></button>
+                        <p th:text="${mapItem.value.message}"></p>
+                    </div>
+                </div>
+                <div th:case="'DANGER'">
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Закрыть"><span aria-hidden="true">&times;</span></button>
+                        <p th:text="${mapItem.value.message}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
 
         <table class="table table-hover">
             <thead>

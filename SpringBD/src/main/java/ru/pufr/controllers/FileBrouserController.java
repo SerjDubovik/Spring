@@ -43,6 +43,7 @@ public class FileBrouserController {
         fb.FileBrouser();
 
         model.addAttribute("direction", path);
+        //model.addAttribute("message", fb.getMessage());
         model.addAttribute("pathLine", fb.getPathLine());
         model.addAttribute("brouser", fb.getFileExplorer());
         return "file-brouser";
@@ -60,6 +61,7 @@ public class FileBrouserController {
         fb.FileBrouser();
 
         model.addAttribute("direction", direction);
+        //model.addAttribute("message", fb.getMessage());
         model.addAttribute("pathLine", fb.getPathLine());
         model.addAttribute("brouser", fb.getFileExplorer());
         return "file-brouser";
@@ -156,10 +158,11 @@ public class FileBrouserController {
         HttpHeaders headers = new HttpHeaders();
 
         String str = new String(file.getName().getBytes("UTF-8"),"UTF-8");
+        str = str + "saveFile";
 
         System.out.println(str);
 
-        headers.add("Content-Disposition", "attachment; filename=" + str);   //String.format("attachment; filename=\"%s\"", file.getName())
+        headers.add("Content-Disposition", "attachment; filename= " + str);   //String.format("attachment; filename=\"%s\"", file.getName())
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
@@ -185,38 +188,27 @@ public class FileBrouserController {
 
 
     @PreAuthorize("hasAuthority('developers:write')")
-    @PostMapping("/fileBrouser_create_folder_blanc")
-    public String fileBrouser_create_folder_blanc(@RequestParam String direction, Model model) {
-
-        direction = direction + "/";
-
-        FileBrouserClass fb = new FileBrouserClass(direction);
-        fb.FileBrouser();
-
-        model.addAttribute("direction", direction);
-        model.addAttribute("pathLine", fb.getPathLine());
-        model.addAttribute("brouser", fb.getFileExplorer());
-        return "fileBrouser-CreateFolder";
-    }
-
-
-
-    @PreAuthorize("hasAuthority('developers:write')")
     @PostMapping("/fileBrouser_create_folder")
     public String fileBrouser_create_folder(@RequestParam String direction, @RequestParam String nameFolder, Model model) {
 
-        // boolean mkdir(): создает новый каталог и при удачном создании возвращает значение true
+        // direction проверить на валидность пути пользователя
 
         File dir = new File(direction + "/" + nameFolder);
-
-        boolean created = dir.mkdir();
-        if(created)
-            System.out.println("Folder has been created");
 
         FileBrouserClass fb = new FileBrouserClass(direction);
         fb.FileBrouser();
 
+
+        boolean created = dir.mkdir();          // создает новый каталог и при удачном создании возвращает значение true
+        if(created){
+            System.out.println("Folder has been created");
+            //fb.msgCreate(MsgType.SUCCESS.toString(),"err1", "Папка успешно создана");
+        }else{
+            fb.msgCreate(MsgType.WARNING.toString(),"err1", "Не удалось создать папку");
+        }
+
         model.addAttribute("direction", direction);
+        model.addAttribute("message", fb.getMessage());
         model.addAttribute("pathLine", fb.getPathLine());
         model.addAttribute("brouser", fb.getFileExplorer());
         return "file-brouser";

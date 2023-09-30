@@ -5,11 +5,7 @@ package ru.pufr.FileBrouser;
 import ru.pufr.models.*;
 
 import java.io.File;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.TreeMap;
-
+import java.util.*;
 
 
 public class FileBrouserClass{
@@ -18,6 +14,7 @@ public class FileBrouserClass{
     private Map<String, FileView> files = new TreeMap<>();
     private Map<String, FileView> fileExplorer = new LinkedHashMap<>();
     private Map<Integer, FileViewAddressPath> pathLine = new LinkedHashMap<>();     // адресная строка в виде массива для отображения на вьюшке
+    private Map<String, MsgUser> message = new LinkedHashMap<>();       // покажет на отображении сообщения при выполнении команд пользователя. ошибки и т.д
     private String logo;
     private String name;
     private String type;
@@ -57,6 +54,14 @@ public class FileBrouserClass{
 
     public void setPathLine(Map<Integer, FileViewAddressPath> pathLine) {
         this.pathLine = pathLine;
+    }
+
+    public Map<String, MsgUser> getMessage() {
+        return message;
+    }
+
+    public void setMessage(Map<String, MsgUser> message) {
+        this.message = message;
     }
 
     public String getLogo() {
@@ -106,6 +111,7 @@ public class FileBrouserClass{
     public void setNameFolder(String nameFolder) {
         this.nameFolder = nameFolder;
     }
+
 
 
     public FileBrouserClass(String path) {
@@ -223,7 +229,27 @@ public class FileBrouserClass{
             }
 
             fileExplorer.put(dir.getName(), new FileView(getNameIcon(fileExtension), dir.getName(),"file", fileLength + " " + QnByte, ""));
+
+
+            String subDirection = path.substring(1);    // обрежем первый слеш в строке, мешает для следующего разбития строки на слова по слеши
+            String[] words = subDirection.split("/");       // ну и тут строку на слова по слеши
+
+            String str = "";
+
+            int i = 0;
+
+            for(String word : words){
+                str = str + "/" + word;
+                pathLine.put(i, new FileViewAddressPath(word, str));
+                i++;
+            }
         }
+    }
+
+
+    public void msgCreate(String typeOfMsg, String name, String msg){
+
+        message.put(name, new MsgUser(name, typeOfMsg, msg));
     }
 
 
