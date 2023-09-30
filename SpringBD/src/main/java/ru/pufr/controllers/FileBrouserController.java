@@ -133,7 +133,7 @@ public class FileBrouserController {
         String directionSub = direction.substring(0,index);
 
         directionSub = directionSub + "/";
-        
+
         FileBrouserClass fb = new FileBrouserClass(directionSub);
         fb.FileBrouser();
 
@@ -186,7 +186,7 @@ public class FileBrouserController {
 
     @PreAuthorize("hasAuthority('developers:write')")
     @PostMapping("/fileBrouser_create_folder_blanc")
-    public String fileBrouser_create_folder(@RequestParam String direction, Model model) {
+    public String fileBrouser_create_folder_blanc(@RequestParam String direction, Model model) {
 
         direction = direction + "/";
 
@@ -213,7 +213,13 @@ public class FileBrouserController {
         if(created)
             System.out.println("Folder has been created");
 
-        return "redirect:/fileBrouser";
+        FileBrouserClass fb = new FileBrouserClass(direction);
+        fb.FileBrouser();
+
+        model.addAttribute("direction", direction);
+        model.addAttribute("pathLine", fb.getPathLine());
+        model.addAttribute("brouser", fb.getFileExplorer());
+        return "file-brouser";
     }
 
 

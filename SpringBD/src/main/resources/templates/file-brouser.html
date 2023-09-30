@@ -47,13 +47,51 @@
                 </div>
             </div>
 
+        <br>
 
         <div class="container">
 
             <div class="col-md-2">
-                <p>Кнопка "создать папку"</p>
+
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-light btn-group-sm" data-toggle="modal" data-target="#myModal">
+                    Создать папку
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Введите название папки</h4>
+                            </div>
+
+                            <div class="modal-body">
+                                <form action="/fileBrouser_create_folder" method="post">
+
+                                    <div class="input-group">
+                                        <input type="hidden" name="direction" th:value="${direction}">
+                                        <input type="text" name="nameFolder" th:value="${nameFolder}" placeholder="Новая папка" class="form-control" >
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="submit">Создать</button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">Закрыть</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
+
+            <div class="col-md-10">
+
+            </div>
         </div>
 
 

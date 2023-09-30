@@ -48,8 +48,14 @@
         </div>
 
         <br>
-
-        <p>кнопка отправки названия папки</p>
+        <p>Введите название папки</p>
+        <br>
+        <form action="/fileBrouser_create_folder" method="post">
+            <input type="text" name="nameFolder" th:value="${mapItem.value.path}" placeholder="Имя папки" class="form-control">
+            <input type="hidden" name="direction" th:value="${direction}">
+            <br>
+            <button type="submit" class="btn btn-success">Создать</button><br>
+        </form>
 
     </div>
 
