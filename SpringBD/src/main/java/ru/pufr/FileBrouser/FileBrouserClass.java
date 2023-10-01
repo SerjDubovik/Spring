@@ -121,11 +121,22 @@ public class FileBrouserClass{
 
     public void FileBrouser() {
 
+        if (!(folders.isEmpty())){      // если вызываем не в первый раз, то чистим списки перед новым наполнением
+            folders.clear();
+        }
+        if (!(files.isEmpty())){
+            files.clear();
+        }
+        if (!(pathLine.isEmpty())){
+            pathLine.clear();
+        }
+
+
         File dir = new File(path);                  // определяем объект для каталога
 
         if(dir.isDirectory()) {
 
-            for(File item : dir.listFiles())        // получаем все вложенные объекты в каталоге, заполняем две карты сортируя по алвавиту , отдельно для файлов, отдельно для папок
+            for(File item : dir.listFiles())        // получаем все вложенные объекты в каталоге, заполняем две карты сортируя по алфавиту, отдельно для файлов, отдельно для папок
             {
                 if(item.isDirectory())
                 {

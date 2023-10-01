@@ -22,10 +22,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class FileBrouserController {
@@ -158,7 +155,6 @@ public class FileBrouserController {
         HttpHeaders headers = new HttpHeaders();
 
         String str = new String(file.getName().getBytes("UTF-8"),"UTF-8");
-        str = str + "saveFile";
 
         System.out.println(str);
 
@@ -193,24 +189,48 @@ public class FileBrouserController {
 
         // direction проверить на валидность пути пользователя
 
-        File dir = new File(direction + "/" + nameFolder);
-
         FileBrouserClass fb = new FileBrouserClass(direction);
         fb.FileBrouser();
 
+        File dir = new File(direction);             // создаем объект с текущим адресом, где мы хотим создать новую папку
 
-        boolean created = dir.mkdir();          // создает новый каталог и при удачном создании возвращает значение true
-        if(created){
-            System.out.println("Folder has been created");
-            //fb.msgCreate(MsgType.SUCCESS.toString(),"err1", "Папка успешно создана");
+        List<String> strDir = new ArrayList<>();    // список всех папок по этому адресу
+
+
+        if(dir.isDirectory()) {                     // заполняем список строками перечислением
+
+            for(File item : dir.listFiles())
+            {
+                if(item.isDirectory())
+                {
+                    strDir.add(item.getName());
+                }
+            }
+        }
+
+
+        if(strDir.stream().anyMatch(lang -> lang.equals(nameFolder))){      // если в папке есть папка с именем как хотим создать, выходим
+
+            fb.msgCreate(MsgType.DANGER.toString(),"err", "Папка с таким именем уже существует");
+
         }else{
-            fb.msgCreate(MsgType.WARNING.toString(),"err1", "Не удалось создать папку");
+            File dir1 = new File(direction + "/" + nameFolder);
+
+            boolean created = dir1.mkdir();          // создает новый каталог и при удачном создании возвращает значение true
+            if(created){
+                //System.out.println("Folder has been created");
+                //fb.msgCreate(MsgType.SUCCESS.toString(),"err1", "Папка успешно создана");
+                fb.FileBrouser();                   // если папка успешно создана, то обновим списки для отображения
+            }else{
+                fb.msgCreate(MsgType.WARNING.toString(),"err1", "Не удалось создать папку");
+            }
         }
 
         model.addAttribute("direction", direction);
         model.addAttribute("message", fb.getMessage());
         model.addAttribute("pathLine", fb.getPathLine());
         model.addAttribute("brouser", fb.getFileExplorer());
+        //return "file-brouser";
         return "file-brouser";
     }
 
@@ -222,7 +242,7 @@ public class FileBrouserController {
         // boolean renameTo(File dest): переименовывает файл или каталог
 
 
-        return "redirect:/fileBrouser";
+        return "file-brouser";
     }
 
 
