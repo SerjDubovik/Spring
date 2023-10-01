@@ -4,7 +4,6 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import ru.pufr.FileBrouser.FileBrouserClass;
 import ru.pufr.models.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -71,7 +70,6 @@ public class FileBrouserController {
 
         // тут должна быть проверка пути на валидность
 
-
         File dir = new File(direction);                  // определяем объект для каталога
 
         String nameFile = dir.getName();
@@ -89,17 +87,18 @@ public class FileBrouserController {
             String subDirection = direction.substring(lastSlesh);   // обрезаем из пути имя выбранного объекта
             direction = direction.replace(subDirection, "");    // заменяем в пути имя выбранного объекта пустотой. (поискать решение по красивее)
 
-        FileBrouserClass fb1 = new FileBrouserClass(direction);     // переписать красивее, излишне создавать два одинаковых объекта
 
+        fb.setPath(direction);
+        fb.FileBrouser();
 
         model.addAttribute("nameFile", nameFile);
         model.addAttribute("fileExtension", fileExtension);
-        model.addAttribute("pathLine", fb1.getPathLine());
+        model.addAttribute("pathLine", fb.getPathLine());
         return "file-brouserFile";
     }
 
 
-    @PreAuthorize("hasAuthority('developers:write')")           // отдает страницу с детальным описанием файла или каталога
+    @PreAuthorize("hasAuthority('developers:write')")           // отдает страницу с детальным описанием выбраного каталога
     @PostMapping("/fileBrouser_folder")
     public String fileBrouser_deteils(@RequestParam String direction, Model model) {
 
@@ -107,6 +106,8 @@ public class FileBrouserController {
 
         direction = direction + "/";
         FileBrouserClass fb = new FileBrouserClass(direction);
+        fb.FileBrouser();
+
         fb.FileBrouserDetails();
 
         model.addAttribute("direction", direction);
@@ -191,14 +192,10 @@ public class FileBrouserController {
 
         FileBrouserClass fb = new FileBrouserClass(direction);
         fb.FileBrouser();
-
         File dir = new File(direction);             // создаем объект с текущим адресом, где мы хотим создать новую папку
-
         List<String> strDir = new ArrayList<>();    // список всех папок по этому адресу
 
-
         if(dir.isDirectory()) {                     // заполняем список строками перечислением
-
             for(File item : dir.listFiles())
             {
                 if(item.isDirectory())
@@ -230,7 +227,6 @@ public class FileBrouserController {
         model.addAttribute("message", fb.getMessage());
         model.addAttribute("pathLine", fb.getPathLine());
         model.addAttribute("brouser", fb.getFileExplorer());
-        //return "file-brouser";
         return "file-brouser";
     }
 
@@ -247,52 +243,35 @@ public class FileBrouserController {
 
 
 
-
-
     @PreAuthorize("hasAuthority('developers:write')")
     @PostMapping("/addFile") // //new annotation since 4.3
     public String singleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes, @RequestParam String direction, Model model) {
 
+        FileBrouserClass fb = new FileBrouserClass(direction);
+
         if (file.isEmpty()) {
-            redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
-            return "redirect:uploadStatus";
+            redirectAttributes.addFlashAttribute("message", "Выберите файлы для загрузки");
+            //return "redirect:uploadStatus";
         }
 
         try {
-
-
             byte[] bytes = file.getBytes();             // Get the file and save it somewhere
-
 
             Path path = Paths.get(direction + "/" + file.getOriginalFilename());
             Files.write(path, bytes);
 
-
-            /*
-            redirectAttributes.addFlashAttribute("message",
-                    "You successfully uploaded '" + file.getOriginalFilename() + "'");
-
-            String test = new String(bytes, "UTF-8");           // преобразует массив байт в строку
-            model.addAttribute("test", test);
-            return "demonstration";
-            */
-
         } catch (IOException e) {
             e.printStackTrace();
+            fb.msgCreate(MsgType.DANGER.toString(),"err", "Файл не загружен");
         }
 
+        fb.FileBrouser();
+
         model.addAttribute("direction", direction);
-        return "redirect:/fileBrouser";
-        //return "file-brouser";
-    }
-
-
-
-
-    @PreAuthorize("hasAuthority('developers:write')")
-    @GetMapping("/uploadStatus")
-    public String uploadStatus() {
-        return "uploadStatus";
+        model.addAttribute("message", fb.getMessage());
+        model.addAttribute("pathLine", fb.getPathLine());
+        model.addAttribute("brouser", fb.getFileExplorer());
+        return "file-brouser";
     }
 
 }

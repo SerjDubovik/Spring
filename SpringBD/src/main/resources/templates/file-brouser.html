@@ -88,8 +88,42 @@
                 </div>
             </div>
 
+            <div class="col-md-2">
 
-            <div class="col-md-10">
+                <button type="button" class="btn btn-light btn-group-sm" data-toggle="modal" data-target="#ModalUpLoad">
+                    Загрузить файлы
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="ModalUpLoad" tabindex="-1" role="dialog" aria-labelledby="ModalUpLoadLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="ModalUpLoadLabel">Укажите файл для загрузки</h4>
+                            </div>
+
+                            <div class="modal-body">
+                                <form method="post" action="/addFile" enctype="multipart/form-data">
+                                    <div class="input-group">
+                                        <input type="hidden" name="direction" th:value="${direction}">
+                                        <input type="file" name="file" class="form-control" >
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="submit">Загрузить файл</button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">Закрыть</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
 
             </div>
         </div>
@@ -201,9 +235,6 @@
                                 </form>
                             </div>
                         </div>
-
-
-
 
                     </td>
 

@@ -51,6 +51,56 @@
     <p>Подробная инфа об объекте</p>
     <br>
 
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th></th>
+        <th></th>
+        <th>Тип</th>
+        <th>Размер</th>
+        <th></th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="mapItem : ${brouser}">
+
+        <td>
+          <img style="max-height: 26px; max-width: 26px" th:src="${'/images/icon/' + mapItem.value.logo}"/>
+        </td>
+
+        <td>
+          <p th:value="${mapItem.value.name}"></p>
+        </td>
+
+
+        <td>
+          <p th:text="${mapItem.value.type}"></p>
+        </td>
+
+
+        <td>
+          <p th:text="${mapItem.value.size}"></p>
+        </td>
+
+        <td>
+          <form class="form-test" th:action="@{/fileBrouser_delete}" method="post">
+            <input type="hidden" name="direction" th:value="${mapItem.value.path + mapItem.value.name}">
+            <input style="color: blue" type="submit" value="Удалить">
+          </form>
+        </td>
+
+        <td>
+          <form class="form-test" th:action="@{/fileBrouser_save_archiv}" method="post">
+            <input type="hidden" name="direction" th:value="${mapItem.value.path + mapItem.value.name}">
+            <input style="color: blue" type="submit" value="Скачать архивом">
+          </form>
+        </td>
+
+      </tr>
+      </tbody>
+    </table>
+
   </div>
 
 </div>

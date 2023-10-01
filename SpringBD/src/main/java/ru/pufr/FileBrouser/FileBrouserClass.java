@@ -130,6 +130,9 @@ public class FileBrouserClass{
         if (!(pathLine.isEmpty())){
             pathLine.clear();
         }
+        if (!(fileExplorer.isEmpty())){
+            fileExplorer.clear();
+        }
 
 
         File dir = new File(path);                  // определяем объект для каталога
@@ -203,58 +206,17 @@ public class FileBrouserClass{
 
     public void FileBrouserDetails() {              // метод, возвращает детальное описание файла или папки
 
+        if (!(fileExplorer.isEmpty())){
+            fileExplorer.clear();
+        }
+
         File dir = new File(path);                  // определяем объект для каталога
 
         if(dir.isDirectory())
         {
             fileExplorer.put(dir.getName(), new FileView("folder.ico", dir.getName(),"folder", "", path));
-        }else{
-            String nameFile = dir.getName();
-            String fileExtension;
-
-            if(getExtensionByStringHandling(nameFile).isPresent()){     // берем расширение файла в строку
-                fileExtension = getExtensionByStringHandling(nameFile).get();
-            }else{
-                fileExtension = "file extension Not found";
-            }
-
-            Long fileLength = null;
-            String QnByte = "Б";
-
-            if((dir.length() >= 0) && (dir.length() <= 1023)){
-                QnByte = "Б";
-                fileLength = dir.length();
-
-            }
-            if((dir.length() >= 1024) && (dir.length() <= 1_048_575)) {
-                QnByte = "КБ";
-                fileLength = dir.length() / 1000;
-            }
-            if((dir.length() >= 1_048_576) && (dir.length() <= 1_073_741_823)) {
-                QnByte = "МБ";
-                fileLength = dir.length() / 1_000_000;
-            }
-            if((dir.length() > 1_073_741_823)) {
-                QnByte = "ГБ";
-                fileLength = dir.length() / 1_000_000_000;
-            }
-
-            fileExplorer.put(dir.getName(), new FileView(getNameIcon(fileExtension), dir.getName(),"file", fileLength + " " + QnByte, ""));
-
-
-            String subDirection = path.substring(1);    // обрежем первый слеш в строке, мешает для следующего разбития строки на слова по слеши
-            String[] words = subDirection.split("/");       // ну и тут строку на слова по слеши
-
-            String str = "";
-
-            int i = 0;
-
-            for(String word : words){
-                str = str + "/" + word;
-                pathLine.put(i, new FileViewAddressPath(word, str));
-                i++;
-            }
         }
+
     }
 
 

@@ -2,6 +2,8 @@ package ru.pufr.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +30,15 @@ public class AdminController {
     @PreAuthorize("hasAuthority('developers:write')")
     @GetMapping("/enter")
     public String adminHome(Model model) {
+
+        String email = getCurrentUsername();         // тут мы узнаём кто авторизовался. дальше нужно пробежатся по списку
+
+        Optional<User> user = userRepository.findByEmail(email);
+        ArrayList<User> nik = new ArrayList<>();
+        user.ifPresent(nik::add);
+
+        model.addAttribute("nik", nik);
+
         return "admin-page";
     }
 
@@ -160,6 +171,12 @@ public class AdminController {
         userRepository.save(user);
 
         return "redirect:/users";
+    }
+
+
+    public String getCurrentUsername() {        // метод показывает ник того, кто сейчас авторизовался в сессии
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth.getName();
     }
 
 }

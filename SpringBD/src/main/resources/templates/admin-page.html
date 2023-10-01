@@ -17,24 +17,33 @@
 <body>
 
 
-<header th:insert = "blocks\header :: header"></header>
+<header th:insert = "blocks/header :: header"></header>
 
 
 <div class="container">
     <p>Это страница админа</p>
     <br>
     <br>
+
     <form action="/auth/logout" method="post">
-        <button type="submit" class="btn btn-success">Выйти из аккаунта</button><br>
+        <button type="submit" class="btn btn-light">Выйти из аккаунта</button><br>
     </form>
-
     <br>
-        <a href="/fileBrouser">Браузер</a>
+    <button class="btn btn-light" onclick="window.location.href = '/fileBrouser';">Файловый браузер</button>
     <br>
-    <br>
-        <a href="/users">Пользователи</a>
+    <button class="btn btn-light" onclick="window.location.href = '/users';">Список пользователей</button>
     <br>
 
+
+    <br>
+    <div th:each="el : ${nik}">
+        <p th:text="${el.email}"></p>
+        <p th:text="${el.firstName}"></p>
+        <p th:text="${el.lastName}"></p>
+        <p th:text="${el.role}"></p>
+        <p th:text="${el.status}"></p>
+    </div>
+    <br>
 
 
 </div>
@@ -43,7 +52,7 @@
 
 
 
-<div th:insert = "blocks\footer :: footer"></div>
+<div th:insert = "blocks/footer :: footer"></div>
 
 
 <!-- jQuery -->
