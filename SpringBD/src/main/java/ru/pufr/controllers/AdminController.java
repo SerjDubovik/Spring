@@ -36,9 +36,7 @@ public class AdminController {
         Optional<User> user = userRepository.findByEmail(email);
         ArrayList<User> nik = new ArrayList<>();
         user.ifPresent(nik::add);
-
         model.addAttribute("nik", nik);
-
         return "admin-page";
     }
 
@@ -67,6 +65,7 @@ public class AdminController {
                               @RequestParam String password,
                               @RequestParam String firstName,
                               @RequestParam String lastName,
+                              @RequestParam String pathline,
                               @RequestParam String role,
                               @RequestParam String status,
                               Model model){
@@ -78,7 +77,7 @@ public class AdminController {
 
         String uuid = UUID.randomUUID().toString();                     // создаём уникальный номер, для активации
 
-        User user = new User(email, hashedPassword, firstName, lastName, uuid, role, status);
+        User user = new User(email, hashedPassword, firstName, lastName, uuid, pathline, role, status);
         userRepository.save(user);
 
         return "redirect:/users";
@@ -122,6 +121,7 @@ public class AdminController {
                               @RequestParam String password,
                               @RequestParam String firstName,
                               @RequestParam String lastName,
+                              @RequestParam String pathline,
                               @RequestParam String role,
                               @RequestParam String status,
                               Model model){
@@ -135,6 +135,7 @@ public class AdminController {
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setTestCell(uuid);
+        user.setPathline(pathline);
         user.setRole(Role.valueOf(role));
         user.setStatus(Status.valueOf(status));
 

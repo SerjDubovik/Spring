@@ -17,7 +17,7 @@
 
 <body>
 
-<header th:insert = "blocks\header :: header"></header>
+<header th:insert = "blocks/header :: header"></header>
 
 <div class="container">
     <div class="row">
@@ -31,6 +31,7 @@
                     <p th:text="${el.password}"></p>
                     <p th:text="${el.firstName}"></p>
                     <p th:text="${el.lastName}"></p>
+                    <p th:text="${el.pathline}"></p>
                     <p th:text="${el.role}"></p>
                     <p th:text="${el.status}"></p>
 
@@ -46,7 +47,7 @@
 </div>
 
 
-<div th:insert = "blocks\footer :: footer"></div>
+<div th:insert = "blocks/footer :: footer"></div>
 
 
 <!-- jQuery -->

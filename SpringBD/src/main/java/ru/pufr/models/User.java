@@ -4,6 +4,7 @@ import lombok.Data;
 
 //import jakarta.persistence.*;
 import javax.persistence.*;
+import java.util.Optional;
 
 @Data
 @Entity
@@ -29,6 +30,9 @@ public class User {
     @Column(name = "testCell")
     private String testCell;
 
+    @Column(name = "pathline")
+    private String pathline;
+
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "role")
@@ -41,16 +45,16 @@ public class User {
     public User() {
     }
 
-    public User(String email, String password, String firstName, String lastName, String testCell, String role, String status) {
+    public User(String email, String password, String firstName, String lastName, String testCell, String pathline, String role, String status) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.testCell = testCell;
+        this.pathline = pathline;
         this.role = Role.valueOf(role);
         this.status = Status.valueOf(status);
         //this.role = Role.USER;
         //this.status = Status.ACTIVE;
     }
-
 }

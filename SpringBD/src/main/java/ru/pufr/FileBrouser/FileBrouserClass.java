@@ -21,6 +21,8 @@ public class FileBrouserClass{
     private String size;
     private String path;
 
+    private String pathCut;
+
     private String nameFolder;
 
 
@@ -104,6 +106,14 @@ public class FileBrouserClass{
         this.path = path;
     }
 
+    public String getPathCut() {
+        return pathCut;
+    }
+
+    public void setPathCut(String pathCut) {
+        this.pathCut = pathCut;
+    }
+
     public String getNameFolder() {
         return nameFolder;
     }
@@ -114,8 +124,9 @@ public class FileBrouserClass{
 
 
 
-    public FileBrouserClass(String path) {
+    public FileBrouserClass(String path, String pathCut) {
         this.path = path;
+        this.pathCut = pathCut;
     }
 
 
@@ -135,7 +146,7 @@ public class FileBrouserClass{
         }
 
 
-        File dir = new File(path);                  // определяем объект для каталога
+        File dir = new File(pathCut + path);                  // определяем объект для каталога
 
         if(dir.isDirectory()) {
 

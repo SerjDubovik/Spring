@@ -29,9 +29,12 @@
         <button type="submit" class="btn btn-light">Выйти из аккаунта</button><br>
     </form>
     <br>
+    <br>
     <button class="btn btn-light" onclick="window.location.href = '/fileBrouser';">Файловый браузер</button>
     <br>
+    <br>
     <button class="btn btn-light" onclick="window.location.href = '/users';">Список пользователей</button>
+    <br>
     <br>
 
 
@@ -40,6 +43,7 @@
         <p th:text="${el.email}"></p>
         <p th:text="${el.firstName}"></p>
         <p th:text="${el.lastName}"></p>
+        <p th:text="${el.pathline}"></p>
         <p th:text="${el.role}"></p>
         <p th:text="${el.status}"></p>
     </div>

@@ -13,7 +13,7 @@
 <body>
 
 
-<header th:insert = "blocks\header :: header"></header>
+<header th:insert = "blocks/header :: header"></header>
 
 
 <div class="container">
@@ -28,6 +28,7 @@
                 <input type="text" name="password"  placeholder="Пароль"                class="form-control"><br>
                 <input type="text" name="firstName" placeholder="Имя"                   class="form-control"><br>
                 <input type="text" name="lastName"  placeholder="Фамилия"               class="form-control"><br>
+                <input type="text" name="pathline"  placeholder="Путь к домашней папке" class="form-control"><br>
                 <input type="text" name="role"      placeholder="Роль пользователя"     class="form-control"><br>
                 <input type="text" name="status"    placeholder="Статус пользователя"   class="form-control"><br>
 
@@ -44,7 +45,7 @@
 </div>
 
 
-<div th:insert = "blocks\footer :: footer"></div>
+<div th:insert = "blocks/footer :: footer"></div>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
