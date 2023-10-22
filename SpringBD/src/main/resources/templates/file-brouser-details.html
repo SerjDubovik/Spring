@@ -34,14 +34,16 @@
   <div class="row">
 
     <div class="container">
+      <!--
       <div style="display:inline; float:left; margin:5pt;">
         <a href="/fileBrouser">..</a>
       </div>
+      -->
       <div style="display:inline; float:left; margin:5pt;" th:each="mapItem : ${pathLine}">
         <div>
           <form class="form-test" th:action="@{/fileBrouser}" method="post">
             <input type="hidden" name="direction" th:value="${mapItem.value.path}">
-            <input type="submit" th:value="${'/ ' + mapItem.value.nameFolder}">
+            <input type="submit" th:value="${'/' + mapItem.value.nameFolder}">
           </form>
         </div>
       </div>

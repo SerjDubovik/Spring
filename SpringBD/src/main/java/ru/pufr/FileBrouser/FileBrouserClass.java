@@ -198,18 +198,37 @@ public class FileBrouserClass{
             fileExplorer.put(entry.getKey(),entry.getValue());
         }
 
+        System.out.println("path in class: " + path);
+
+        if(!Objects.equals(path, "/")) {
             String subDirection = path.substring(1);    // обрежем первый слеш в строке, мешает для следующего разбития строки на слова по слеши
             String[] words = subDirection.split("/");       // ну и тут строку на слова по слеши
 
             String str = "";
 
-            int i = 0;
+            pathLine.put(0, new FileViewAddressPath("home", "/"));
+
+
+            System.out.print("Mass words: ");
+            for(int count = 0; count < words.length; count++){
+                System.out.print(" " + words[count].toString());
+            }
+            System.out.println("");
+            System.out.println("---------");
+
+            int i = 1;
 
             for(String word : words){
                 str = str + "/" + word;
                 pathLine.put(i, new FileViewAddressPath(word, str));
                 i++;
             }
+
+        }
+        if(Objects.equals(path, "/")){
+            pathLine.put(0, new FileViewAddressPath("home", "/"));
+            System.out.println("defolt string");
+        }
     }
 
 
@@ -221,7 +240,7 @@ public class FileBrouserClass{
             fileExplorer.clear();
         }
 
-        File dir = new File(path);                  // определяем объект для каталога
+        File dir = new File(pathCut + path);                  // определяем объект для каталога
 
         if(dir.isDirectory())
         {

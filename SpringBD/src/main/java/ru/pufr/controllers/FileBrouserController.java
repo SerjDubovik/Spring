@@ -38,6 +38,7 @@ public class FileBrouserController {
     public String fileBrouser(Model model) {
 
         String pathCut = getPath();        // возвращает разрешённый для использования адрес в файловой системе
+        System.out.println("User path: " + pathCut + " Direction: /");
 
         FileBrouserClass fb = new FileBrouserClass("/", pathCut);
         fb.FileBrouser();
@@ -56,8 +57,14 @@ public class FileBrouserController {
 
         String pathCut = getPath();        // возвращает разрешённый для использования адрес в файловой системе
 
+        System.out.println("first Direction: " + direction);
 
-        direction = direction + "/";
+        if(!Objects.equals(direction, "/")){
+            direction += "/";
+        }
+
+        System.out.println("User path: " + pathCut + " Direction: " + direction);
+
         FileBrouserClass fb = new FileBrouserClass(direction, pathCut);
         fb.FileBrouser();
 
@@ -75,7 +82,13 @@ public class FileBrouserController {
 
         String pathCut = getPath();        // возвращает разрешённый для использования адрес в файловой системе
 
-        File dir = new File(direction);                  // определяем объект для каталога
+        System.out.println("User path: " + pathCut + " Direction: " + direction);
+
+        if(!Objects.equals(direction, "/")){
+            direction += "/";
+        }
+
+        File dir = new File(pathCut + direction);                  // определяем объект для каталога
 
         String nameFile = dir.getName();
         String fileExtension;
@@ -88,9 +101,9 @@ public class FileBrouserController {
                 fileExtension = "file extension Not found";
             }
 
-            int lastSlesh = direction.lastIndexOf('/');     // находим номер по порядку последнего слеша в адресе
-            String subDirection = direction.substring(lastSlesh);   // обрезаем из пути имя выбранного объекта
-            direction = direction.replace(subDirection, "");    // заменяем в пути имя выбранного объекта пустотой. (поискать решение по красивее)
+            int lastSlesh = direction.lastIndexOf('/');                 // находим номер по порядку последнего слеша в адресе
+            String subDirection = direction.substring(lastSlesh);           // обрезаем из пути имя выбранного объекта
+            direction = direction.replace(subDirection, "");     // заменяем в пути имя выбранного объекта пустотой. (поискать решение по красивее)
 
 
         fb.setPath(direction);
@@ -109,7 +122,12 @@ public class FileBrouserController {
 
         String pathCut = getPath();        // возвращает разрешённый для использования адрес в файловой системе
 
-        direction = direction + "/";
+        if(!Objects.equals(direction, "/")){
+            direction += "/";
+        }
+
+        System.out.println("User path: " + pathCut + " Direction: " + direction);
+
         FileBrouserClass fb = new FileBrouserClass(direction, pathCut);
         fb.FileBrouser();
 
@@ -130,14 +148,18 @@ public class FileBrouserController {
 
         String pathCut = getPath();        // возвращает разрешённый для использования адрес в файловой системе
 
-        File deleteDir = new File(direction);
+        System.out.println("User path: " + pathCut + " Direction: " + direction);
+
+        if(!Objects.equals(direction, "/")){
+            direction += "/";
+        }
+
+        File deleteDir = new File(pathCut + direction);
         deleteDir.delete();
 
 
         int index = direction.lastIndexOf('/');
         String directionSub = direction.substring(0,index);
-
-        directionSub = directionSub + "/";
 
         FileBrouserClass fb = new FileBrouserClass(directionSub, pathCut);
         fb.FileBrouser();
@@ -155,7 +177,11 @@ public class FileBrouserController {
     @PostMapping("/fileBrouser_save")
     public ResponseEntity<Object> fileBrouser_save(@RequestParam String direction, Model model) throws IOException {
 
-        File file = new File(direction);
+        String pathCut = getPath();        // возвращает разрешённый для использования адрес в файловой системе
+
+        System.out.println("User path: " + pathCut + " Direction: " + direction);
+
+        File file = new File(pathCut + direction);
         InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
         HttpHeaders headers = new HttpHeaders();
@@ -195,9 +221,11 @@ public class FileBrouserController {
 
         String pathCut = getPath();        // возвращает разрешённый для использования адрес в файловой системе
 
+        System.out.println("User path: " + pathCut + " Direction: " + direction);
+
         FileBrouserClass fb = new FileBrouserClass(direction, pathCut);
         fb.FileBrouser();
-        File dir = new File(direction);             // создаем объект с текущим адресом, где мы хотим создать новую папку
+        File dir = new File(pathCut + direction);             // создаем объект с текущим адресом, где мы хотим создать новую папку
         List<String> strDir = new ArrayList<>();    // список всех папок по этому адресу
 
         if(dir.isDirectory()) {                     // заполняем список строками перечислением
@@ -216,7 +244,7 @@ public class FileBrouserController {
             fb.msgCreate(MsgType.DANGER.toString(),"err", "Папка с таким именем уже существует");
 
         }else{
-            File dir1 = new File(direction + "/" + nameFolder);
+            File dir1 = new File(pathCut + direction + "/" + nameFolder);
 
             boolean created = dir1.mkdir();          // создает новый каталог и при удачном создании возвращает значение true
             if(created){
@@ -254,6 +282,8 @@ public class FileBrouserController {
 
         String pathCut = getPath();        // возвращает разрешённый для использования адрес в файловой системе
 
+        System.out.println("User path: " + pathCut + " Direction: " + direction);
+
         FileBrouserClass fb = new FileBrouserClass(direction, pathCut);
 
         if (file.isEmpty()) {
@@ -264,7 +294,7 @@ public class FileBrouserController {
         try {
             byte[] bytes = file.getBytes();             // Get the file and save it somewhere
 
-            Path path = Paths.get(direction + "/" + file.getOriginalFilename());
+            Path path = Paths.get(pathCut + direction + "/" + file.getOriginalFilename());
             Files.write(path, bytes);
 
         } catch (IOException e) {
