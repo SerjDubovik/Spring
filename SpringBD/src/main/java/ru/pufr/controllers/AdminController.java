@@ -33,11 +33,30 @@ public class AdminController {
 
         String email = getCurrentUsername();         // тут мы узнаём кто авторизовался. дальше нужно пробежатся по списку
 
-        Optional<User> user = userRepository.findByEmail(email);
-        ArrayList<User> nik = new ArrayList<>();
-        user.ifPresent(nik::add);
-        model.addAttribute("nik", nik);
-        return "admin-page";
+        User muUser = userRepository.findByEmail(email).<RuntimeException>orElseThrow(() -> {throw new AssertionError();});
+        String muRole = String.valueOf(muUser.getRole());
+        String muStatus = String.valueOf(muUser.getStatus());
+
+        if(muRole.equals("ADMIN") && muStatus.equals("ACTIVE")){
+
+            Optional<User> user = userRepository.findByEmail(email);
+            ArrayList<User> nik = new ArrayList<>();
+            user.ifPresent(nik::add);
+
+            model.addAttribute("nik", nik);
+            return "admin-page";
+        }
+
+        if(muRole.equals("USER") && muStatus.equals("ACTIVE")){
+            Optional<User> user = userRepository.findByEmail(email);
+            ArrayList<User> nik = new ArrayList<>();
+            user.ifPresent(nik::add);
+
+            model.addAttribute("nik", nik);
+            return "work";
+        }
+
+        return "home";
     }
 
 

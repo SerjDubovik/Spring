@@ -79,12 +79,8 @@ public class FileBrouserController {
     public String fileBrouserFile(@RequestParam String direction, Model model) {
 
         String pathCut = getPath();        // возвращает разрешённый для использования адрес в файловой системе
+        String typeView = "null";
 
-        System.out.println("User path: " + pathCut + " Direction: " + direction);
-
-        if(!Objects.equals(direction, "/")){
-            direction += "/";
-        }
 
         File dir = new File(pathCut + direction);                  // определяем объект для каталога
 
@@ -99,7 +95,10 @@ public class FileBrouserController {
                 fileExtension = "file extension Not found";
             }
 
-                if(fileExtension.equals("jpg") || fileExtension.equals("png")){
+                if(fileExtension.equals("jpg") || fileExtension.equals("JPG") ||
+                   fileExtension.equals("png") || fileExtension.equals("PNG") ||
+                   fileExtension.equals("jif") || fileExtension.equals("JIF") ||
+                   fileExtension.equals("tif") || fileExtension.equals("TIF")) {
 
                     try {
                         byte[] test = Files.readAllBytes(Path.of(pathCut + direction));
@@ -114,18 +113,43 @@ public class FileBrouserController {
                         throw new RuntimeException(e);
                     }
 
+                    typeView = "image";
                 }
 
-            int lastSlesh = direction.lastIndexOf('/');                 // находим номер по порядку последнего слеша в адресе
-            String subDirection = direction.substring(lastSlesh);           // обрезаем из пути имя выбранного объекта
-            direction = direction.replace(subDirection, "");     // заменяем в пути имя выбранного объекта пустотой. (поискать решение по красивее)
+                if(fileExtension.equals("txt") || fileExtension.equals("TXT") ||
+                   fileExtension.equals("doc") || fileExtension.equals("DOC") ||
+                   fileExtension.equals("html") || fileExtension.equals("HTML") ||
+                   fileExtension.equals("c") || fileExtension.equals("C") ||
+                   fileExtension.equals("java") || fileExtension.equals("JAVA") ||
+                   fileExtension.equals("xml") || fileExtension.equals("XML") ) {
 
+                    try {
 
-        fb.setPath(direction);
+                        BufferedReader reader = new BufferedReader(new FileReader(pathCut + direction));
+                        String textStr = reader.readLine();
+                        textStr += "\r";
+                        String buff = "";
+                        while (buff != null) {
+                            buff = reader.readLine();
+                            textStr = textStr + buff + "\r";
+                        }
+
+                        model.addAttribute("textStr", textStr );
+                        reader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    typeView = "text";
+                }
+
+        int index = direction.lastIndexOf('/');
+        String directionSub = direction.substring(0,index);
+
+        fb.setPath(directionSub);
         fb.FileBrouser();
 
-        model.addAttribute("nameFile", nameFile);
-        model.addAttribute("fileExtension", fileExtension);
+        model.addAttribute("typeView", typeView);
         model.addAttribute("pathLine", fb.getPathLine());
         return "file-brouserFile";
     }

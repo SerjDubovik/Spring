@@ -33,11 +33,7 @@
 
   <div class="row">
     <div class="container">
-      <!--
-      <div style="display:inline; float:left; margin:5pt;">
-        <a href="/fileBrouser">..</a>
-      </div>
-      -->
+
       <div style="display:inline; float:left; margin:5pt;" th:each="mapItem : ${pathLine}">
         <div>
           <form class="form-test" th:action="@{/fileBrouser}" method="post">
@@ -49,16 +45,24 @@
     </div>
 
     <br>
-    <p>Тут будет радактироватся и просматриватся файл, если поддерживается формат</p>
-    <br>
-    <p th:text="${nameFile}"></p>
-    <p th:text="${fileExtension}"></p>
 
-    <br>
-
-    <div>
-      <img class="img-fluid" th:src="${colum} + ${image}"/>
+    <div class="container">
+      <div th:switch="${typeView}">
+        <div th:case="'null'">
+          <p>Выбранный файл не поддерживается</p>
+        </div>
+        <div th:case="'image'">
+          <img style="max-width: 100%; max-height: 100%" th:src="${colum} + ${image}"/>
+        </div>
+        <div th:case="'text'">
+          <textarea rows="35" maxlength="100000" name="full_text"  placeholder="Текст файла" class="form-control" th:text="${textStr}"/><br>
+        </div>
+        <div th:case="'pdf'">
+        </div>
+      </div>
     </div>
+
+    <br>
 
   </div>
 
