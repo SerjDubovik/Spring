@@ -9,6 +9,8 @@ public class WorkController {
 
     @GetMapping("/work")
     public String adminHome(Model model) {
+
+
         return "work";
     }
 }

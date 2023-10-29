@@ -27,7 +27,7 @@ public class AdminController {
     private UserRepository userRepository;
 
 
-    @PreAuthorize("hasAuthority('developers:write')")
+    @PreAuthorize("hasAuthority('developers:read')")
     @GetMapping("/enter")
     public String adminHome(Model model) {
 

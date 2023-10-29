@@ -123,6 +123,8 @@ public class FileBrouserClass{
     }
 
 
+    public FileBrouserClass() {
+    }
 
     public FileBrouserClass(String path, String pathCut) {
         this.path = path;
@@ -201,20 +203,20 @@ public class FileBrouserClass{
         System.out.println("path in class: " + path);
 
         if(!Objects.equals(path, "/")) {
-            String subDirection = path.substring(1);    // обрежем первый слеш в строке, мешает для следующего разбития строки на слова по слеши
-            String[] words = subDirection.split("/");       // ну и тут строку на слова по слеши
 
+            String subDirection = "";
+
+            if(!path.isEmpty()){
+                subDirection = path.substring(1);    // обрежем первый слеш в строке, мешает для следующего разбития строки на слова по слеши
+            }
+
+            System.out.println("subDirection: " + subDirection);
+            System.out.println("---------");
+
+            String[] words = subDirection.split("/");       // ну и тут строку на слова по слеши
             String str = "";
 
             pathLine.put(0, new FileViewAddressPath("home", "/"));
-
-
-            System.out.print("Mass words: ");
-            for(int count = 0; count < words.length; count++){
-                System.out.print(" " + words[count].toString());
-            }
-            System.out.println("");
-            System.out.println("---------");
 
             int i = 1;
 
@@ -223,6 +225,14 @@ public class FileBrouserClass{
                 pathLine.put(i, new FileViewAddressPath(word, str));
                 i++;
             }
+
+
+            //System.out.print("Mass words: ");
+            //for(int count = 0; count < words.length; count++){
+            //    System.out.print(" " + words[count].toString());
+            //}
+            //System.out.println("");
+            //System.out.println("---------");
 
         }
         if(Objects.equals(path, "/")){

@@ -19,9 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.stereotype.Controller;
 import ru.pufr.repo.UserRepository;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,7 +31,7 @@ public class FileBrouserController {
     @Autowired
     private UserRepository userRepository;
 
-    @PreAuthorize("hasAuthority('developers:write')")
+    @PreAuthorize("hasAuthority('developers:read')")
     @GetMapping("/fileBrouser")
     public String fileBrouser(Model model) {
 
@@ -51,7 +49,7 @@ public class FileBrouserController {
     }
 
 
-    @PreAuthorize("hasAuthority('developers:write')")
+    @PreAuthorize("hasAuthority('developers:read')")
     @PostMapping("/fileBrouser")
     public String fileBrouser(@RequestParam String direction, Model model) {
 
@@ -76,7 +74,7 @@ public class FileBrouserController {
     }
 
 
-    @PreAuthorize("hasAuthority('developers:write')")           // передаёт страницу для редактирования и просмотра файлов, если поддерживается
+    @PreAuthorize("hasAuthority('developers:read')")           // передаёт страницу для редактирования и просмотра файлов, если поддерживается
     @PostMapping("/fileBrouser_file")
     public String fileBrouserFile(@RequestParam String direction, Model model) {
 
@@ -101,6 +99,23 @@ public class FileBrouserController {
                 fileExtension = "file extension Not found";
             }
 
+                if(fileExtension.equals("jpg") || fileExtension.equals("png")){
+
+                    try {
+                        byte[] test = Files.readAllBytes(Path.of(pathCut + direction));
+                        byte[] encodeBase64 = Base64.getEncoder().encode(test);
+
+                        String base64Encoded = new String(encodeBase64, "UTF-8");
+                        String colum = "data:image/" + fileExtension + ";base64,";
+
+                        model.addAttribute("image", base64Encoded );
+                        model.addAttribute("colum", colum);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+
             int lastSlesh = direction.lastIndexOf('/');                 // находим номер по порядку последнего слеша в адресе
             String subDirection = direction.substring(lastSlesh);           // обрезаем из пути имя выбранного объекта
             direction = direction.replace(subDirection, "");     // заменяем в пути имя выбранного объекта пустотой. (поискать решение по красивее)
@@ -116,7 +131,7 @@ public class FileBrouserController {
     }
 
 
-    @PreAuthorize("hasAuthority('developers:write')")           // отдает страницу с детальным описанием выбраного каталога
+    @PreAuthorize("hasAuthority('developers:read')")           // отдает страницу с детальным описанием выбраного каталога
     @PostMapping("/fileBrouser_folder")
     public String fileBrouser_deteils(@RequestParam String direction, Model model) {
 
@@ -142,7 +157,7 @@ public class FileBrouserController {
 
 
 
-    @PreAuthorize("hasAuthority('developers:write')")
+    @PreAuthorize("hasAuthority('developers:read')")
     @PostMapping("/fileBrouser_delete")
     public String fileBrouser_delete(@RequestParam String direction, Model model) {
 
@@ -150,30 +165,45 @@ public class FileBrouserController {
 
         System.out.println("User path: " + pathCut + " Direction: " + direction);
 
-        if(!Objects.equals(direction, "/")){
-            direction += "/";
-        }
 
         File deleteDir = new File(pathCut + direction);
         deleteDir.delete();
 
+        String directionSub = "";
 
-        int index = direction.lastIndexOf('/');
-        String directionSub = direction.substring(0,index);
+        FileBrouserClass fb = new FileBrouserClass();
 
-        FileBrouserClass fb = new FileBrouserClass(directionSub, pathCut);
-        fb.FileBrouser();
+        if(!Objects.equals(direction, "/")) {
+            int index = direction.lastIndexOf('/');
+            directionSub = direction.substring(0,index);
 
-        model.addAttribute("direction", directionSub);
-        model.addAttribute("pathLine", fb.getPathLine());
-        model.addAttribute("brouser", fb.getFileExplorer());
-        return "file-brouser";
+            fb.setPath(directionSub);
+            fb.setPathCut(pathCut);
+            fb.FileBrouser();
+
+            model.addAttribute("direction", directionSub);
+            model.addAttribute("pathLine", fb.getPathLine());
+            model.addAttribute("brouser", fb.getFileExplorer());
+            return "file-brouser";
+
+        }else{
+
+            fb.setPath("/");
+            fb.setPathCut(pathCut);
+            fb.FileBrouser();
+
+            model.addAttribute("direction", "/");
+            model.addAttribute("pathLine", fb.getPathLine());
+            model.addAttribute("brouser", fb.getFileExplorer());
+            return "file-brouser";
+        }
+
     }
 
 
 
 
-    @PreAuthorize("hasAuthority('developers:write')")           // метод скачивает указанный файл
+    @PreAuthorize("hasAuthority('developers:read')")           // метод скачивает указанный файл
     @PostMapping("/fileBrouser_save")
     public ResponseEntity<Object> fileBrouser_save(@RequestParam String direction, Model model) throws IOException {
 
@@ -185,7 +215,7 @@ public class FileBrouserController {
         InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
         HttpHeaders headers = new HttpHeaders();
-
+//String base64Encoded = new String(encodeBase64, "UTF-8");
         String str = new String(file.getName().getBytes("UTF-8"),"UTF-8");
 
         System.out.println(str);
@@ -204,7 +234,7 @@ public class FileBrouserController {
 
 
 
-    @PreAuthorize("hasAuthority('developers:write')")
+    @PreAuthorize("hasAuthority('developers:read')")
     @PostMapping("/fileBrouser_save_archiv")
     public String fileBrouser_save_archiv(@RequestParam String direction, Model model) {
 
@@ -215,7 +245,7 @@ public class FileBrouserController {
 
 
 
-    @PreAuthorize("hasAuthority('developers:write')")
+    @PreAuthorize("hasAuthority('developers:read')")
     @PostMapping("/fileBrouser_create_folder")
     public String fileBrouser_create_folder(@RequestParam String direction, @RequestParam String nameFolder, Model model) {
 
@@ -264,7 +294,7 @@ public class FileBrouserController {
     }
 
 
-    @PreAuthorize("hasAuthority('developers:write')")
+    @PreAuthorize("hasAuthority('developers:read')")
     @PostMapping("/fileBrouser_rename_folder")
     public String fileBrouser_rename_folder(@RequestParam String direction, @RequestParam String nameFolder, Model model) {
 
@@ -276,7 +306,7 @@ public class FileBrouserController {
 
 
 
-    @PreAuthorize("hasAuthority('developers:write')")
+    @PreAuthorize("hasAuthority('developers:read')")
     @PostMapping("/addFile") // //new annotation since 4.3
     public String singleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes, @RequestParam String direction, Model model) {
 
