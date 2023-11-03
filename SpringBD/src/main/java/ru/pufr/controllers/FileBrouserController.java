@@ -1,12 +1,14 @@
 package ru.pufr.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.ResponseBody;
 import ru.pufr.FileBrouser.FileBrouserClass;
 import ru.pufr.models.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,6 +32,8 @@ public class FileBrouserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    private static String videoPath = "";
 
     @PreAuthorize("hasAuthority('developers:read')")
     @GetMapping("/fileBrouser")
@@ -143,6 +147,12 @@ public class FileBrouserController {
                     typeView = "text";
                 }
 
+      if(fileExtension.equals("mp4") || fileExtension.equals("MP4")) {
+
+         videoPath = "/test/admin/Guide for words.mp4";     // дописать формирование строки от выбора пользователя
+         typeView = "video";
+      }
+
         int index = direction.lastIndexOf('/');
         String directionSub = direction.substring(0,index);
 
@@ -152,6 +162,14 @@ public class FileBrouserController {
         model.addAttribute("typeView", typeView);
         model.addAttribute("pathLine", fb.getPathLine());
         return "file-brouserFile";
+    }
+
+    @PreAuthorize("hasAuthority('developers:read')")
+    @GetMapping("/videosrc")
+    //@GetMapping(value = "/videosrc", produces = "video/mp4")
+    @ResponseBody
+    public FileSystemResource videoSource() {       // метод отдаёт выбранный видеофайл в видеопроигрыватель браузера
+        return new FileSystemResource(new File(videoPath));
     }
 
 

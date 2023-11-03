@@ -59,6 +59,11 @@
         </div>
         <div th:case="'pdf'">
         </div>
+        <div th:case="'video'">
+          <video width="auto" height="480" controls style=" margin-left: auto; margin-right: auto; display: block;">
+            <source th:src="@{/videosrc}" type="video/mp4">
+          </video>
+        </div>
       </div>
     </div>
 
