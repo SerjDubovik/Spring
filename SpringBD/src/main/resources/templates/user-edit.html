@@ -18,26 +18,31 @@
 
 <div class="container">
     <div class="row">
+        <div class="col-md-8">
+                <div th:each="el : ${user}" class="alert alert-info mt-2">
+                    <form method="post">
+                        <input type="text" th:value="${el.email}" name="email" placeholder="Введите email" class="form-control"><br>
+                        <input type="text" th:value="${el.password}" name="password" placeholder="Введите пароль" class="form-control"><br>
+                        <input type="text" th:value="${el.firstName}" name="firstName" placeholder="Введите имя" class="form-control"><br>
+                        <input type="text" th:value="${el.lastName}" name="lastName" placeholder="Введите фамилию" class="form-control"><br>
+                        <input type="text" th:value="${el.pathline}" name="pathline" placeholder="Введите путь к домашней папке" class="form-control"><br>
+                        <input type="text" th:value="${el.counterEntry}" name="counterEntry" placeholder="Введите количество посещений" class="form-control"><br>
+                        <input type="text" th:value="${el.role}" name="role" placeholder="Введите роль" class="form-control"><br>
+                        <input type="text" th:value="${el.status}" name="status" placeholder="Введите статус" class="form-control"><br>
 
-            <div th:each="el : ${user}" class="alert alert-info mt-2">
-                <form method="post">
-                    <input type="text" th:value="${el.email}" name="email" placeholder="Введите email" class="form-control"><br>
-                    <input type="text" th:value="${el.password}" name="password" placeholder="Введите пароль" class="form-control"><br>
-                    <input type="text" th:value="${el.firstName}" name="firstName" placeholder="Введите имя" class="form-control"><br>
-                    <input type="text" th:value="${el.lastName}" name="lastName" placeholder="Введите фамилию" class="form-control"><br>
-                    <input type="text" th:value="${el.pathline}" name="pathline" placeholder="Введите путь к домашней папке" class="form-control"><br>
-                    <input type="text" th:value="${el.role}" name="role" placeholder="Введите роль" class="form-control"><br>
-                    <input type="text" th:value="${el.status}" name="status" placeholder="Введите статус" class="form-control"><br>
 
+                        <button type="submit" class="btn btn-success">Обновить</button><br>
+                    </form>
+                </div>
 
-                    <button type="submit" class="btn btn-success">Обновить</button><br>
-                </form>
-            </div>
+            <br>
+            <p th:text="${message}"></p>
         </div>
 
-        <br>
+        <div class="col-md-4">
+            <a th:href="'/users'" class="btn btn-warning">К списку пользователей</a>
+        </div>
 
-        <p th:text="${message}"></p>
 
 
     </div>

@@ -277,6 +277,7 @@ public class FileBrouserClass{
             case "pdf" : case "PDF" :
                 nameIcon = "icon_pdf.ico"; break;
             case "mkv" : case "MKV" :
+            case "mp4" : case "MP4" :
                 nameIcon = "icon_mkv.ico"; break;
             case "avi" : case "AVI" :
                 nameIcon = "icon_avi.ico"; break;

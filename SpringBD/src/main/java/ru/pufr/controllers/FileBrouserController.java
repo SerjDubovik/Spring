@@ -149,8 +149,9 @@ public class FileBrouserController {
 
       if(fileExtension.equals("mp4") || fileExtension.equals("MP4")) {
 
-         videoPath = "/test/admin/Guide for words.mp4";     // дописать формирование строки от выбора пользователя
-         typeView = "video";
+         //videoPath = "/test/admin/Guide for words.mp4";     // дописать формирование строки от выбора пользователя
+          videoPath = (pathCut + direction);
+          typeView = "video";
       }
 
         int index = direction.lastIndexOf('/');

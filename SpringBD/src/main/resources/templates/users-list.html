@@ -32,6 +32,7 @@
                     <p th:text="${el.firstName}"></p>
                     <p th:text="${el.lastName}"></p>
                     <p th:text="${el.pathline}"></p>
+                    <p th:text="${el.counterEntry}"></p>
                     <p th:text="${el.role}"></p>
                     <p th:text="${el.status}"></p>
 
@@ -42,6 +43,7 @@
         <div class="col-md-4">
             <a th:href="'/users'" class="btn btn-warning">Обновить список</a>
             <a th:href="'/userAdd'" class="btn btn-warning">Создать пользователя</a>
+            <a th:href="'/enter'" class="btn btn-warning">Вернутся в кабинет</a>
         </div>
     </div>
 </div>
