@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+  <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
+
+  <style>
+    .form-test {
+      font: 16px Arial;
+    }
+    .form-test input {
+      font: 16px Arial;
+      border: none;
+      padding: 0;
+      background: #ffffff;
+      color: #000000;
+    }
+  </style>
+
+</head>
+
+<body>
+
+
+<header th:insert = "blocks/header :: header"></header>
+
+
+<div class="container">
+
+  <div class="row">
+    <div class="container">
+
+      <div style="display:inline; float:left; margin:5pt;" th:each="mapItem : ${pathLine}">
+        <div>
+          <form class="form-test" th:action="@{/fileBrouser}" method="post">
+            <input type="hidden" name="direction" th:value="${mapItem.value.path}">
+            <input type="submit" th:value="${'/' + mapItem.value.nameFolder}">
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="container">
+      <div th:switch="${typeView}">
+        <div th:case="'null'">
+          <p>Выбранный файл не поддерживается</p>
+        </div>
+        <div th:case="'image'">
+          <img style="max-width: 100%; max-height: 100%" th:src="${colum} + ${image}"/>
+        </div>
+        <div th:case="'text'">
+          <textarea rows="35" maxlength="100000" name="full_text"  placeholder="Текст файла" class="form-control" th:text="${textStr}"/><br>
+        </div>
+        <div th:case="'pdf'">
+        </div>
+        <div th:case="'video'">
+          <video width="auto" height="480" controls style=" margin-left: auto; margin-right: auto; display: block;">
+            <source th:src="@{/videosrc}" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+
+    <br>
+
+  </div>
+
+</div>
+
+
+<div th:insert = "blocks/footer :: footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+</body>
+</html>

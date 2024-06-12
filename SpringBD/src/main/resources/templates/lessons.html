@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title th:text="${title}"></title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> -->
+    <!-- Optional theme-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
+
+</head>
+
+<body>
+
+<header th:insert = "blocks/header :: header"></header>
+
+<div class="container">
+
+        <a th:href="'/enter'" class="btn btn-warning">Вернутся в кабинет</a>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson1';">Урок 1</button>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson2';">Урок 2</button>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson3';">Урок 3</button>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson4';">Урок 4</button>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson5';">Урок 5</button>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson6';">Урок 6</button>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson7';">Урок 7</button>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson8';">Урок 8</button>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson9';">Урок 9</button>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson10';">Урок 10</button>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson11';">Урок 11</button>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson12';">Урок 12</button>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson13';">Урок 13</button>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson14';">Урок 14</button>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson15';">Урок 15</button>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson16';">Урок 16</button>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson17';">Урок 17</button>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson18';">Урок 18</button>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson19';">Урок 19</button>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson20';">Урок 20</button>
+        <br>
+        <br>
+        <button class="btn btn-light" onclick="window.location.href = '/lesson21';">Урок 21</button>
+        <br>
+        <br>
+
+</div>
+
+
+<div th:insert = "blocks/footer :: footer"></div>
+
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<!--Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>  -->
+
+
+
+</body>
+</html>

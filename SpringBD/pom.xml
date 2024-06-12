@@ -10,7 +10,6 @@
   <name>SpringBD</name>
   <url>http://maven.apache.org</url>
 
-  <!-- 3.1.2 -->
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
@@ -18,11 +17,16 @@
   </parent>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <encoding.type>UTF-8</encoding.type>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <java.version>17</java.version>
     <bootstrap.version>4.2.1</bootstrap.version>
+    <telegrambots-spring.version>0.25</telegrambots-spring.version>
+
+    <project.build.sourceEncoding>${encoding.type}</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>${encoding.type</project.reporting.outputEncoding>
+    <file.encoding>${encoding.type}</file.encoding>
   </properties>
 
   <dependencies>
@@ -67,7 +71,6 @@
       <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
 
-
     <!-- DB jdbc-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -79,6 +82,18 @@
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
       <version>8.0.27</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.24</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mail</artifactId>
     </dependency>
 
 
@@ -95,17 +110,10 @@
 
 
     <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>1.18.24</version>
-      <scope>provided</scope>
+      <groupId>org.telegram</groupId>
+      <artifactId>telegrambots</artifactId>
+      <version>6.5.0</version>
     </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-mail</artifactId>
-    </dependency>
-
 
   </dependencies>
 

@@ -17,46 +17,50 @@
 
 <body>
 
-<header th:insert = "blocks\header :: header"></header>
+<header th:insert = "blocks/header :: header"></header>
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-md-8">
+                <h2>Список пользователей</h2>
 
 
-<div class="container mt-5 mb-5">
-    <h2>Добавить нового пользователя</h2>
-    <form action="/users/add" method="post">
-        <input type="text" name="email"     placeholder="e-mail пользователя"   class="form-control"><br>
-        <input type="text" name="password"  placeholder="Пароль"                class="form-control"><br>
-        <input type="text" name="firstName" placeholder="Имя"                   class="form-control"><br>
-        <input type="text" name="lastName"  placeholder="Фамилия"               class="form-control"><br>
-        <input type="text" name="role"      placeholder="Роль пользователя"     class="form-control"><br>
-        <input type="text" name="status"    placeholder="Статус пользователя"   class="form-control"><br>
+                <div th:each="el : ${users}" class="alert alert-info mt-2">
+                    <p th:text="${el.email}"></p>
+                    <p th:text="${el.password}"></p>
+                    <p th:text="${el.firstName}"></p>
+                    <p th:text="${el.lastName}"></p>
+                    <p th:text="${el.pathline}"></p>
+                    <p th:text="${el.counterEntry}"></p>
+                    <p th:text="${el.role}"></p>
+                    <p th:text="${el.status}"></p>
 
-        <button type="submit" class="btn btn-success">Добавить</button><br>
-    </form>
-</div>
+                    <a th:href="'/users/' + ${el.id}" class="btn btn-warning">Детальнее</a>
+                </div>
 
-<div class="container mt-5 mb-5">
-    <a class="me-3 py-2 text-dark text-decoration-none" href="/blog/add">Добавить новую стаью</a>
-</div>
+            <br>
 
-<div class="container mt-5">
-    <h2>Список пользователей</h2>
-</div>
+            <div th:each="el : ${botTables}" class="alert alert-info mt-2">
+                <p th:text="${el.name}"></p>
+                <p th:text="${el.date}"></p>
+                <p th:text="${el.time}"></p>
+                <p th:text="${el.pressureLeft}"></p>
+                <p th:text="${el.pressureRight}"></p>
+                <p th:text="${el.rhythm}"></p>
+            </div>
+        </div>
 
-<div  class="container mt-5">
-    <div th:each="el : ${users}" class="alert alert-info mt-2">
-        <p th:text="${el.email}"></p>
-        <p th:text="${el.password}"></p>
-        <p th:text="${el.firstName}"></p>
-        <p th:text="${el.lastName}"></p>
-        <p th:text="${el.role}"></p>
-        <p th:text="${el.status}"></p>
-
-        <a th:href="'/users/' + ${el.id}" class="btn btn-warning">Детальнее</a>
+        <div class="col-md-4">
+            <a th:href="'/users'" class="btn btn-warning">Обновить список</a>
+            <a th:href="'/userAdd'" class="btn btn-warning">Создать пользователя</a>
+            <a th:href="'/enter'" class="btn btn-warning">Вернутся в кабинет</a>
+        </div>
     </div>
 </div>
 
 
-<div th:insert = "blocks\footer :: footer"></div>
+<div th:insert = "blocks/footer :: footer"></div>
 
 
 <!-- jQuery -->

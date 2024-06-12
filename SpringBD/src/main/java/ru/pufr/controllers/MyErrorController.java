@@ -12,11 +12,4 @@ public class MyErrorController implements ErrorController {
         //do something like logging
         return "error-page";
     }
-
-    /*
-    //@Override
-    public String getErrorPath() {
-        return null;
-    }
-    */
 }

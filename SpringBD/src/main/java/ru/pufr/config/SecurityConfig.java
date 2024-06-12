@@ -32,37 +32,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.userDetailsService = userDetailsService;
     }
 
-    /*
-    // авторизация по пользователям
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        super.configure(http);
-    }
-    */
+
+
 
     // авторизация по ролям
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                    .csrf().disable()
-                    .authorizeRequests()
-                    .antMatchers("/").permitAll()                                     // или здесь, или прям в анотации контроллеров
-                   /* .antMatchers("/blog").permitAll()
-                    .antMatchers("/blog/add").hasRole(Role.ADMIN.name()) */
-                    //.anyRequest()                                                     // если убрать коменты, то запрос на ввод пароля будет на каждом переходе
-                    //.authenticated()                                                  // если убрать коменты, то запрос на ввод пароля будет на каждом переходе
-                .and()
-                    //.httpBasic();                                                     // эта кодировка нужна для авторизации по ролям.
-                    .formLogin()
-                    .loginPage("/auth/login").permitAll()
-                    .defaultSuccessUrl("/auth/success")
-                .and()
-                    .logout()
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "POST"))
-                    .invalidateHttpSession(true)
-                    .clearAuthentication(true)
-                    .deleteCookies("JSESSIONID")
-                    .logoutSuccessUrl("/auth/login");
+            .csrf().disable()
+            .authorizeRequests()
+            .antMatchers("/resources/**, /**").permitAll()                                     // или здесь, или прям в анотации контроллеров
+            /* .antMatchers("/blog").permitAll()
+             .antMatchers("/blog/add").hasRole(Role.ADMIN.name()) */
+            //.anyRequest().authenticated()                                              // если убрать коменты, то запрос на ввод пароля будет на каждом переходе
+            .and()
+            //.httpBasic();                                                             // эта кодировка нужна для авторизации по ролям.
+            .formLogin()
+            .loginPage("/auth/login").permitAll()
+            .defaultSuccessUrl("/auth/success")
+            .and()
+            .logout()
+            .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "POST"))
+            .invalidateHttpSession(true)
+            .clearAuthentication(true)
+            .deleteCookies("JSESSIONID")
+            .logoutSuccessUrl("/auth/login");
 
     }
 

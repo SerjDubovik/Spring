@@ -1,11 +1,11 @@
 package ru.pufr.security;
 
-import ru.pufr.models.Status;
-import ru.pufr.models.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.pufr.models.Status;
+import ru.pufr.models.User;
 
 import java.util.Collection;
 import java.util.List;
