@@ -15,19 +15,11 @@ public class MainController {
         return "home";
     }
 
+
     @GetMapping("/about")
     public String about (){
         return "about";
     }
 
-    @GetMapping("/auth/login")
-    public String getLoginPage(){
-        return "login";
-    }
-
-    @GetMapping("/auth/success")
-    public String getSuccessPage(){
-        return "success";
-    }
 
 }
