@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> -->
+  <!-- Optional theme-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+  <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
+
+</head>
+
+<body>
+
+
+<header th:insert = "blocks/header :: header"></header>
+
+
+<div class="container">
+  <div class="row">
+
+    <div class="col-md-8">
+
+      <div class="ui-state-default mt-2">
+        <h3>Поддомены Spring приложений при помощи Nginx</h3>
+        <br>
+
+        <p class="par">
+          Данная статья расскажет как на хосте организовать работу доменов 3-го уровня при помощи популярного веб-сервера Nginx.
+          В качестве работающих приложений будем использовать java SpringBoot приложения для примера. Статья предназначена в первую очередь начинающим и не несёт
+        какой-то сложный и высокопроизводительный функционал.
+        </p>
+
+        <p class="par">
+          Итак, приступим
+        </p>
+
+        <p class="par">
+          Пару слов о проблеме, которую будем решать. Очень часто в организации логики работы веб-ресурса необходимо использовать поддомены (или их ещё называют домены 3-го
+          уровня). Например, ваш сайт <span style="font-weight: bold">site.com</span>, то для него поддоменом  будет <span style="font-weight: bold">admin.site.com</span> или
+          <span style="font-weight: bold">help.site.com</span> и это, скорее всего сильно различимые по функционалу ресурсы, может быть даже разработанные на разных языках и платформах.
+        </p>
+
+        <p class="par">
+          Также всегда удобно иметь тестовый экземпляр своего приложения по адресу <span style="font-weight: bold">test.site.com</span> и перезапускать его или
+          останавливать пока основной сайт работает.
+        </p>
+
+        <p class="par">
+          Для такой реализации необходимо иметь несколько одновременно работающих приложений на сервере. И каждое из них должно взаимодействовать с портом для связи
+          с внешним миром (80 или 443). Иными словами мы получим коллизию портов.
+        </p>
+
+        <p class="par">
+          Чтобы решить данную проблему можно использовать прокси сервер Nginx. У каждого работающего приложения будет свой отличный внутренний порт,
+          а прокси сервер будет настроен сопоставлять эти порты доменным адресам.
+        </p>
+
+        <br>
+        <p class="par">
+          Дальше мы поэтапно выполним следующее:
+        </p>
+
+        <p class="par">
+          1. У хостера создадим поддомены для каждого работающего приложения.
+        </p>
+
+        <p class="par">
+          2. Создадим несколько Spring приложений для демонстрации.
+        </p>
+
+        <p class="par">
+          3. Установим и настроим на веб-сервер Nginx и развернём там Spring приложения.
+        </p>
+
+        <br>
+
+        <p class="par">
+          Прежде всего нужно получить поддомены для каждого приложения свой. Подразумевается, что у вас уже есть свой зарегистрированный домен.
+          Мы рассмотрим на примере хостера <a href="https://www.1gb.ru">1GB.ru</a>. У других будет что-то подобное, подробности подскажет техподдержка.
+        </p>
+
+        <p class="par">
+          Переходим в личный кабинет и жмем на выделенный пункт на скриншоте ниже.
+        </p>
+
+        <br>
+        <img src="/images/screenWin1.png" class="img-fluid" alt="Личный кабинет хостинга">
+        <br>
+        <br>
+
+        <p class="par">
+          Затем будет таблица ваших записей. Нужно выбрать шестерёнку вашего доменного имени как на скриншоте ниже.
+        </p>
+
+        <br>
+        <img src="/images/screenWin2.png" class="img-fluid" alt="Таблица с записями">
+        <br>
+        <br>
+
+        <p class="par">
+          В следующей таблице мы и добавим поддоменные имена. На скриншоте внизу мы добавим <span style="font-weight: bold">test2.pufr.ru</span>.
+          Обратите внимание, что <span style="font-weight: bold">test.pufr.ru</span> уже есть в списке. в графе "тип записи" нужно выбрать "А", а в параметрах
+          IP адрес конечного сервера.
+        </p>
+
+        <br>
+        <img src="/images/screenWin3.png" class="img-fluid" alt="Таблица с записями">
+        <br>
+        <br>
+
+        <p class="par">
+          Сделаем то же и для псевдонима <span style="font-weight: bold">www.test2.pufr.ru</span>. Обратите внимание, что поля "тип записи" и
+          "параметры" отличаются от предыдущего снимка.
+        </p>
+
+        <br>
+        <img src="/images/screenWin4.png" class="img-fluid" alt="Таблица с записями">
+        <br>
+        <br>
+
+        <p class="par">
+          Изменения вступают в силу не сразу, может потребоваться больше часа. Чтобы проверить что всё прошло успешно, достаточно перейти
+          по созданным поддоменным адресам и должна открыться главная страница вашего приложения, если конечно в этот момент
+          на сервере работает веб-приложение.
+        </p>
+
+        <p class="par">
+          На этом настройка доменных имён завершена. Личный кабинет и панель управления на различных хостингах может сильно отличатся, но суть
+          того что нужно сделать думаю ясна.
+        </p>
+
+        <p class="par">
+          Далее перейдём к конфигурации Spring приложений.
+        </p>
+
+
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<br>
+<br>
+
+<div th:insert = "blocks/footer :: footer"></div>
+
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<!--Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>  -->
+
+
+
+</body>
+</html>
+

@@ -15,11 +15,14 @@ public class MainController {
         return "home";
     }
 
-
     @GetMapping("/about")
     public String about (){
         return "about";
     }
 
+    @GetMapping("/articles/article1")
+    public String articles() {
+        return "/articles/article1";
+    }
 
 }

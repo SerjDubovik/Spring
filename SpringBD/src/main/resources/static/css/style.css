@@ -5,6 +5,12 @@ html {
 body {
     margin-bottom: 100px;
 }
+
+.par{
+    font-family: 'Arial';
+    font-size: 12pt;
+    font-style: normal;
+}
 .footer {
     position: absolute;
     bottom: 0;
