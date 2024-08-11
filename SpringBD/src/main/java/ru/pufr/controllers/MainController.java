@@ -16,13 +16,13 @@ public class MainController {
     }
 
     @GetMapping("/about")
-    public String about (){
+    public String about () {
         return "about";
     }
 
-    @GetMapping("/articles/article1")
+    @GetMapping("/article1")
     public String articles() {
-        return "/articles/article1";
+        return "articles/article1";
     }
 
 }

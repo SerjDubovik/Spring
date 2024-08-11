@@ -12,6 +12,15 @@
 
   <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
 
+  <style>
+    .bg-dark {
+      background-color: #343a40; /* Темный фон */
+    }
+    .text-white {
+      color: #ffffff; /* Белый цвет текста */
+    }
+  </style>
+
 </head>
 
 <body>
@@ -104,7 +113,7 @@
 
         <p class="par">
           В следующей таблице мы и добавим поддоменные имена. На скриншоте внизу мы добавим <span style="font-weight: bold">test2.pufr.ru</span>.
-          Обратите внимание, что <span style="font-weight: bold">test.pufr.ru</span> уже есть в списке. в графе "тип записи" нужно выбрать "А", а в параметрах
+          Обратите внимание, что <span style="font-weight: bold">test.pufr.ru</span> уже есть в списке. В графе "тип записи" нужно выбрать "А", а в параметрах
           IP адрес конечного сервера.
         </p>
 
@@ -138,6 +147,391 @@
           Далее перейдём к конфигурации Spring приложений.
         </p>
 
+        <p class="par">
+          Есть замечательный <a href="https://start.spring.io">ресурс</a> для конфигурирования проектов на spring, вот и воспользуемся им. Ниже
+          на скриншоте окно настроек вашего будущего проекта, настройте так же как на снимке.
+        </p>
+
+        <br>
+        <img src="/images/springConfigFromSite.png" class="img-fluid" alt="Настройки конфигуратора">
+        <br>
+        <br>
+
+        <p class="par">
+          После того как сгенерируете проект, нажав на кнопку GENERATE, вам будет предложено скачать архив. Соглашаемся и сохраняем
+          себе в папку с проектами. Затем архив необходимо распаковать и открыть в IntelliJ IDEA. Студией будет создана иерархия папок и внедрены
+          зависимости, которые мы указали в конфигураторе. Не буду подробно останавливаться на проекте, создании контроллеров и прочего, готовый проект
+          можно взять с GitHub. В итоге должна быть вот такая структура папок:
+        </p>
+
+        <br>
+        <img src="/images/screenIdeaConfig.png" class="img-fluid" alt="Настройки конфигуратора">
+        <br>
+        <br>
+
+        <p class="par">
+          Мы получили простое web приложение, с одной тестовой страничкой. Чтобы убедится в том, что всё работает - запустим его на выполнение.
+          Если всё хорошо, то в терминале мы увидим вот такой вывод без сообщений об ошибках о Spring.
+        </p>
+
+        <br>
+        <img src="/images/screenIdea1.png" class="img-fluid" alt="Терминал без ошибок">
+        <br>
+        <br>
+
+        <p class="par">
+          Ну и перейдя в браузере по адресу <span style="font-weight: bold">http://localhost:59999</span> мы увидим тестовую страничку как на скриншоте ниже
+        </p>
+
+        <br>
+        <img src="/images/screenbrowser1.png" class="img-fluid" alt="работающее тестовое окно">
+        <br>
+        <br>
+
+        <p class="par">
+          Теперь когда всё работает, возвращаемся в студию и переходим в консоль, там упаковываем проект в JAR архив.
+        </p>
+
+        <div class="bg-dark text-white text-left" style="padding: 10px;">
+          mvn package
+        </div>
+        <br>
+
+        <p class="par">
+          В результате мы получим исполняемый архив в папке проекта.
+        </p>
+
+        <p class="par">
+          Всё перечисленное выше необходимо проделать для второго приложения, изменив только лишь текст в передаваемой html страничке
+          и номере порта в файле application.properties. Готовые архивы нужно скопировать на сервер и запустить на выполнение, но об этом позже.
+          Если не хотите самостоятельно выполнять все действия можете просто скачайте себе готовый проект с GitHub.
+        </p>
+
+        <p class="par">
+          Теперь когда у нас есть два рабочих приложение приступим к установке и настройке прокси-сервера Nginx
+        </p>
+
+        <br>
+        <img src="/images/NGINX-logo.png" class="img-responsive" alt="работающее тестовое окно">
+        <br>
+        <br>
+
+
+        <p class="par">
+          Nginx - это высокопроизводительный веб-сервер и реверс-прокси-сервер, который также может использоваться в качестве почтового прокси-сервера.
+          Он был разработан Игорем Сысоевым и выпущен в 2004 году. Основные особенности Nginx:
+        </p>
+
+        <p class="par">
+          1. Высокая производительность: Nginx способен обрабатывать большое количество одновременных соединений благодаря своей асинхронной архитектуре.
+        </p>
+
+        <p class="par">
+          2. Реверс-прокси: Nginx часто используется как реверс-прокси для распределения нагрузки между несколькими серверами.
+        </p>
+
+        <p class="par">
+          3. Кэширование: Поддерживает кэширование статического контента, что позволяет уменьшить время загрузки страниц.
+        </p>
+
+        <p class="par">
+          4. SSL/TLS: Поддержка безопасных соединений с использованием HTTPS.
+        </p>
+
+        <p class="par">
+          5. Модульность: Имеет гибкую архитектуру, позволяя добавлять различные модули для расширения функциональности.
+        </p>
+
+        <p class="par">
+          Nginx широко используется для хостинга веб-сайтов, особенно тех, которые требуют высокой производительности и надежности.
+        </p>
+
+        <p class="par">
+          Для установки Nginx на Linux сервер перейдем в командную строку.
+        </p>
+
+        <div class="bg-dark text-white text-left" style="padding: 10px;">
+          apt install nginx
+        </div>
+        <br>
+
+        <p class="par">
+          Запускаем сервер командой старт
+        </p>
+
+        <div class="bg-dark text-white text-left" style="padding: 10px;">
+          service nginx start
+        </div>
+        <br>
+
+        <p class="par">
+          После установки нужно добавить nginx в автозагрузку
+        </p>
+
+        <div class="bg-dark text-white text-left" style="padding: 10px;">
+          systemctl enable nginx
+        </div>
+        <br>
+
+        <p class="par">
+          Проверяем что сервер работает и добавлен в автозагрузку
+        </p>
+
+        <div class="bg-dark text-white text-left" style="padding: 10px;">
+          service nginx status
+        </div>
+        <br>
+
+        <p class="par">
+          Если всё прошло хорошо, то в консольном выводе будет что-то похожее, как на скришоте ниже.
+        </p>
+
+        <br>
+        <img src="/images/screenServiceNginx.png" class="img-responsive" alt="статус работы сервере">
+        <br>
+        <br>
+
+        <p class="par">
+          И если теперь перейти по адресу нашего сервера, мы попадём на страницу приветствия nginx.
+        </p>
+
+        <br>
+        <img src="/images/welcome to nginx.png" class="img-responsive" alt="статус работы сервере">
+        <br>
+        <br>
+
+        <p class="par">
+          Отлично, прокси-сервер работает с минимальными настройками. Перенастроим его работу под свои нужды.
+        </p>
+
+        <p class="par">
+          Возвращаемся в консоль и переходим по адресу  <span style="font-weight: bold">/etc/nginx/sites-enabled</span>. Здесь создадим
+          файлы конфигурации для каждого приложения отдельный.
+        </p>
+
+        <p class="par">
+          Для доменного адреса <span style="font-weight: bold">test.pufr.ru</span> создадим файл с вот таким текстом:
+        </p>
+
+
+        <div class="card mt-4">
+          <div class="card-body">
+
+              <pre class="bg-light p-3">
+                <code>
+server {
+listen 80;
+listen [::]:80;
+
+server_name test.pufr.ru;
+
+location / {
+proxy_pass http://localhost:58888;
+proxy_set_header X-Forwarded-Host $host;
+proxy_set_header X-Forwarded-Server $host;
+proxy_set_header X-Forwarded-Proto $scheme;
+proxy_set_header X-Forwarded-Port $server_port;
+proxy_set_header X-Forwarded-For $proxy_a
+                </code>
+              </pre>
+          </div>
+        </div>
+
+
+        <p class="par">
+          А для адреса <span style="font-weight: bold">test2.pufr.ru</span> вот с таким:
+        </p>
+
+
+          <div class="card mt-4">
+            <div class="card-body">
+
+              <pre class="bg-light p-3">
+                <code>
+server {
+listen 80;
+listen [::]:80;
+
+server_name test2.pufr.ru;
+
+location / {
+proxy_pass http://localhost:59999;
+proxy_set_header X-Forwarded-Host $host;
+proxy_set_header X-Forwarded-Server $host;
+proxy_set_header X-Forwarded-Proto $scheme;
+proxy_set_header X-Forwarded-Port $server_port;
+                </code>
+              </pre>
+            </div>
+          </div>
+
+        <p class="par">
+          Теперь сделаем созданные нами ранее приложения выполняемыми и добавим их в автозагрузку. Для начала скопируем
+          JAR архивы на сервер в домашнюю папку.
+        </p>
+
+        <p class="par">
+          Перейдём в папку, где хранятся конфигурационные файлы служб
+        </p>
+
+        <div class="bg-dark text-white text-left" style="padding: 10px;">
+          cd /etc/systemd/system/
+        </div>
+        <br>
+
+        <p class="par">
+          Здесь нам нужно создать два файла настроек, для автоматического запуска наших spring приложений. Назовём их
+          test1App.service и test2App.service. Открываем редактор через консоль.
+        </p>
+
+        <div class="bg-dark text-white text-left" style="padding: 10px;">
+          vi test1App.service
+        </div>
+        <br>
+
+        <p class="par">
+          Ну и пишем в него следующий текст:
+        </p>
+
+        <div class="card mt-4">
+          <div class="card-body">
+
+              <pre class="bg-light p-3">
+                <code>
+[Unit]
+Description=This is the #1 test app for explaining how nginx works.
+After=network.target
+
+[Service]
+Type=simple
+SyslogIdentifier=appdescription
+WorkingDirectory=/home/dir/app/
+PIDFile=/home/dir/app/SpringTestApp1.pid
+ExecStart=/bin/sh -c "exec /usr/bin/java -jar SpringTestApp1.jar & echo $! > /home/serj/proj/SpringTestApp1.pid"
+ExecReload=/bin/kill -s HUP $MAINPID ExecStop=/bin/kill -s QUIT $MAINPID
+
+[Service]
+Type=forking
+PIDFile=/home/dir/app/SpringTestApp1.pid
+
+[Install]
+WantedBy=default.target
+                </code>
+              </pre>
+          </div>
+        </div>
+
+
+        <p class="par">
+          В этом файле нужно будет заменить на ваши пути к файлам. Для примера тут архив лежит по пути /home/dir/app/SpringTestApp1.jar.
+          То же самое проделаем для второго файла настроек.
+        </p>
+
+        <div class="bg-dark text-white text-left" style="padding: 10px;">
+          vi test2App.service
+        </div>
+        <br>
+
+        <p class="par">
+          Ну и скрипт соответственно:
+        </p>
+
+
+        <div class="card mt-4">
+          <div class="card-body">
+
+              <pre class="bg-light p-3">
+                <code>
+[Unit]
+Description=This is the #2 test app for explaining how nginx works.
+After=network.target
+
+[Service]
+Type=simple
+SyslogIdentifier=appdescription
+WorkingDirectory=/home/dir/app/
+PIDFile=/home/dir/app/SpringTestApp2.pid
+ExecStart=/bin/sh -c "exec /usr/bin/java -jar SpringTestApp2.jar & echo $! > /home/serj/proj/SpringTestApp2.pid"
+ExecReload=/bin/kill -s HUP $MAINPID ExecStop=/bin/kill -s QUIT $MAINPID
+
+[Service]
+Type=forking
+PIDFile=/home/dir/app/SpringTestApp2.pid
+
+[Install]
+WantedBy=default.target
+                </code>
+              </pre>
+          </div>
+        </div>
+
+
+        <p class="par">
+          Перейдём в каталог, куда мы поместили архивы и указали этот путь в конфигурационных файлах.
+        </p>
+
+        <div class="bg-dark text-white text-left" style="padding: 10px;">
+          cd /home/dir/app/
+        </div>
+        <br>
+
+        <p class="par">
+          Для того чтобы созданные файлы вступили в силу нужно перечитать их.
+        </p>
+
+        <div class="bg-dark text-white text-left" style="padding: 10px;">
+          systemctl daemon-reload
+        </div>
+        <br>
+
+        <p class="par">
+          Затем добавим приложение в автозагрузку.
+        </p>
+
+        <div class="bg-dark text-white text-left" style="padding: 10px;">
+          systemctl enable test1App.service
+        </div>
+        <br>
+
+        <p class="par">
+          И запустим на выполнение.
+        </p>
+
+        <div class="bg-dark text-white text-left" style="padding: 10px;">
+          systemctl start test1App.service
+        </div>
+        <br>
+
+        <p class="par">
+          Первое приложение готово. Если перейти по адресу <a href="http://test.pufr.ru">test.pufr.ru</a>, то откроется
+          страница первого приложения.
+        </p>
+
+        <br>
+        <img src="/images/screenbrowser2.png" class="img-responsive" alt="страница приложения 1 в браузере ">
+        <br>
+        <br>
+
+        <p class="par">
+          По аналогии делаем все вышеперечисленные шаги для приложения 2. Ну и теперь если перейти по адресу
+          <a href="http://test2.pufr.ru">test2.pufr.ru</a>, то откроется
+          страница второго приложения.
+        </p>
+
+        <br>
+        <img src="/images/screenbrowser3.png" class="img-responsive" alt="страница приложения 2 в браузере ">
+        <br>
+        <br>
+
+
+        <p class="par">
+          На этом можно закончить настройку прокси сервере.
+        </p>
+
+        <div class="bg-dark text-white text-left" style="padding: 10px;">
+
+        </div>
+        <br>
 
 
       </div>
